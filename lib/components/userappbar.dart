@@ -36,30 +36,35 @@ class _userappbar extends State<userappbar> {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      leading: IconButton(
-        icon: Icon(Icons.person_add),
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-            return AddUser();
-          }));
-        },
-      ),
-      title: Text(widget.title),
-      centerTitle: true,
-      actions: <Widget>[
-        IconButton(
-          icon: Icon(Icons.save),
-          onPressed: () {
-            print("save");
-          },
-        ),
-        PopupMenuButton(
-          itemBuilder: (context) {
-            return mainprovide.useractions;
-          },
-        )
-      ],
+    return ScopedModelDescendant<MainProvide>(
+      builder: (context, child, model) {
+        return AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.person_add),
+            onPressed: () {
+              // Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              //   return AddUser();
+              // }));
+              model.mainrouter.navigateTo(context, '/user/add');
+            },
+          ),
+          title: Text(widget.title),
+          centerTitle: true,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.save),
+              onPressed: () {
+                print("save");
+              },
+            ),
+            PopupMenuButton(
+              itemBuilder: (context) {
+                return mainprovide.useractions;
+              },
+            )
+          ],
+        );
+      },
     );
   }
 }

@@ -38,6 +38,8 @@ dependencies:
   moor_flutter: ^2.0.0
   moor_generator: ^2.0.1
   scoped_model: ^1.0.1
+  json_to_dart: ^1.0.1
+  bot_toast: ^2.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

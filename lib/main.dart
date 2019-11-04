@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterproject/pages/HomePage.dart';
 import 'package:flutterproject/pages/Login.dart';
 import 'package:flutterproject/providers/mainprovide.dart';
+import 'package:flutterproject/route/routes.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'config/config.dart';
 import 'package:fluro/fluro.dart';
@@ -23,17 +24,11 @@ class MyApp extends StatefulWidget {
 class _MyApp extends State<MyApp> {
   var mainprovide = MainProvide();
   var router = Router();
-  void defineRoutes() {
-    this.router.define("/", handler: Handler(
-        handlerFunc: (BuildContext context, Map<String, dynamic> params) {
-      return HomePage();
-    }));
-  }
-
   @override
   void initState() {
     super.initState();
-    defineRoutes();
+    routeconfig.configureRoutes(router);
+    mainprovide.MainRouter = router;
   }
 
   @override

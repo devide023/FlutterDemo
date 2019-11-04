@@ -43,4 +43,10 @@ class UserService {
   Future modify(FormData data) async {
     return await request().instance.post('/user/modify', data: data);
   }
+
+  Future Find(int userid) async {
+    return await request()
+        .instance
+        .get('/user/find', queryParameters: {"userid": userid});
+  }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart' show StatelessWidget;
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutterproject/components/listitem.dart';
-import 'package:flutterproject/config/config.dart';
 import 'package:flutterproject/entitys/userentity.dart';
 import 'package:flutterproject/providers/mainprovide.dart';
 import 'package:scoped_model/scoped_model.dart';

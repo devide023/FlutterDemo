@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutterproject/config/config.dart';
 import 'package:flutterproject/entitys/userentity.dart';
 import 'package:flutterproject/pages/UserMgr/EditUser_Page.dart';
+import 'package:flutterproject/providers/mainprovide.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class listitem extends StatefulWidget {
   UserModel userobj;
@@ -17,6 +19,7 @@ class _listitem extends State<listitem> {
     if (widget.userobj.headimg != null) {
       tempname = widget.userobj.headimg;
     }
+    var model = ScopedModel.of<MainProvide>(context);
     return Container(
       padding: EdgeInsets.symmetric(vertical: 5.0),
       child: Row(
@@ -52,12 +55,14 @@ class _listitem extends State<listitem> {
               onSelected: (v) {
                 switch (v) {
                   case 'edit':
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (context) {
-                      return EditUser_Page(
-                        userobj: widget.userobj,
-                      );
-                    }));
+                    // Navigator.of(context)
+                    //     .push(MaterialPageRoute(builder: (context) {
+                    //   return EditUser_Page(
+                    //     userobj: widget.userobj,
+                    //   );
+                    // }));
+                    model.mainrouter.navigateTo(
+                        context, '/user/edit?userid=${widget.userobj.id}');
                     break;
                   case 'del':
                     showDialog(
