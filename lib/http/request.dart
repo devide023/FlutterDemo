@@ -16,12 +16,11 @@ class request {
   Dio get instance {
     _dio.interceptors
         .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
-      print('dio onrequest:${options.toString()}');
+      print('request======path:${options.path}==${options.queryParameters}');
       return options;
     }, onResponse: (Response response) async {
       return response;
     }, onError: (DioError e) async {
-      print("DioError:${e.message}");
       return e;
     }));
     return _dio;

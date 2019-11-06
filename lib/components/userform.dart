@@ -6,14 +6,18 @@ import 'package:flutterproject/config/config.dart';
 import 'package:flutterproject/entitys/userentity.dart';
 import 'package:flutterproject/providers/mainprovide.dart';
 import 'package:flutterproject/public/NetLoadingDialog.dart';
+import 'package:flutterproject/services/UploadService.dart';
 import 'package:flutterproject/services/UserService.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class userform extends StatefulWidget {
   UserModel userentity;
+
   userform({Key key, this.userentity}) : super(key: key);
+
   @override
-  State<userform> createState() {
+  _userform createState() {
     return _userform();
   }
 }
@@ -23,36 +27,35 @@ class _userform extends State<userform> {
   TextEditingController ctr_username = TextEditingController();
   TextEditingController ctr_usertel = TextEditingController();
   TextEditingController ctr_userphone = TextEditingController();
-  TextEditingController ctr_sex = TextEditingController();
   TextEditingController ctr_address = TextEditingController();
   TextEditingController ctr_birthdate = TextEditingController();
   TextEditingController ctr_head = TextEditingController();
+  TextEditingController ctr_sex = TextEditingController();
   String temp = AppConfig.str_default_image;
   int choosesex = 1;
-
   @override
   Widget build(BuildContext context) {
-    if (userentity != null) {
-      ctr_usercode.text = widget.userentity.usercode;
-      ctr_username.text = widget.userentity.username;
-      ctr_usertel.text = widget.userentity.tel;
-      ctr_userphone.text = widget.userentity.phone;
-      ctr_birthdate.text = widget.userentity.birthdate;
-      ctr_address.text = widget.userentity.address;
-      ctr_birthdate.text = widget.userentity.birthdate;
-      temp = widget.userentity.headimg ?? AppConfig.str_default_image;
-      ctr_head.text = temp;
-    }
-    return ScopedModelDescendant<MainProvide>(
-      builder: (context, child, model) {
-        return Container(
-          padding: EdgeInsets.symmetric(horizontal: 10.0),
-          child: Form(
-            child: ListView(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                  child: TextFormField(
+    ctr_usercode.text = widget.userentity?.usercode;
+    ctr_username.text = widget.userentity?.username;
+    ctr_usertel.text = widget.userentity?.tel;
+    ctr_userphone.text = widget.userentity?.phone;
+    ctr_birthdate.text = widget.userentity?.birthdate;
+    ctr_address.text = widget.userentity?.address;
+    ctr_birthdate.text = widget.userentity?.birthdate;
+    ctr_sex.text = widget.userentity?.sex == 1 ? "男" : "女";
+    temp = widget.userentity.headimg ?? AppConfig.str_default_image;
+    ctr_head.text = temp;
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10.0),
+      child: Form(
+        child: ListView(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+              child: Stack(
+                alignment: AlignmentDirectional.centerEnd,
+                children: <Widget>[
+                  TextFormField(
                     controller: ctr_head,
                     decoration: InputDecoration(
                       icon: Icon(Icons.image),
@@ -60,142 +63,181 @@ class _userform extends State<userform> {
                     ),
                     readOnly: true,
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 5.0),
-                  child: TextFormField(
-                    controller: ctr_usercode,
-                    decoration: InputDecoration(
-                      icon: Icon(Icons.code),
-                      hintText: "用户编码",
-                    ),
-                    readOnly: true,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 5.0),
-                  child: TextFormField(
-                    controller: ctr_username,
-                    decoration: InputDecoration(
-                        icon: Icon(Icons.person), hintText: "用户名"),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 5.0),
-                  child: Row(
-                    children: <Widget>[
-                      Icon(Icons.wc),
-                      Flexible(
-                        child: RadioListTile(
-                          value: 1,
-                          title: Text("男"),
-                          groupValue: choosesex,
-                          onChanged: (v) {
-                            setState(() {
-                              choosesex = v;
-                            });
-                          },
-                        ),
-                      ),
-                      Flexible(
-                        child: RadioListTile(
-                          value: 2,
-                          title: Text("女"),
-                          groupValue: choosesex,
-                          onChanged: (v) {
-                            setState(() {
-                              choosesex = v;
-                            });
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 5.0),
-                  child: TextFormField(
-                    controller: ctr_usertel,
-                    decoration: InputDecoration(
-                        icon: Icon(Icons.stay_primary_portrait),
-                        hintText: "电话"),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 5.0),
-                  child: TextFormField(
-                    controller: ctr_userphone,
-                    decoration:
-                        InputDecoration(icon: Icon(Icons.call), hintText: "座机"),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 5.0),
-                  child: TextFormField(
-                    controller: ctr_birthdate,
-                    decoration: InputDecoration(
-                        icon: Icon(Icons.date_range), hintText: "出生日期"),
-                    readOnly: true,
-                    onTap: () async {
-                      var d = await showDatePicker(
-                          firstDate: DateTime(1700),
-                          lastDate: DateTime(2900, 12, 31),
-                          initialDate: DateTime.now(),
-                          context: context,
-                          locale: Locale('zh'));
-                      ctr_birthdate.text = d.toString().substring(0, 10);
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 5.0),
-                  child: TextFormField(
-                    controller: ctr_address,
-                    decoration: InputDecoration(
-                        icon: Icon(Icons.room), hintText: "通讯地址"),
-                    maxLines: 2,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 40.0, bottom: 10.0),
-                  child: FlatButton(
-                    textColor: Colors.white,
-                    color: Theme.of(context).primaryColor,
-                    child: Text("确定"),
+                  IconButton(
+                    icon: Icon(Icons.cloud_upload),
                     onPressed: () async {
-                      widget.userentity.sex = choosesex;
-                      var formdata =
-                          FormData.fromMap(widget.userentity.toJson());
-                      var result = await showDialog(
-                        context: context,
-                        builder: (context) {
-                          return NetLoadingDialog(
-                            requestCallBack: UserService().modify(formdata),
-                          );
-                        },
-                      );
-                      showDialog(
+                      var img = await ImagePicker.pickImage(
+                          source: ImageSource.gallery);
+                      FormData formData = FormData.fromMap(
+                          {"file": await MultipartFile.fromFile(img.path)});
+                      var res = await showDialog(
                           context: context,
                           builder: (context) {
-                            return AlertDialog(
-                              title: Text("提示"),
-                              content: json.decode(result.toString())['msg'],
-                              actions: <Widget>[
-                                FlatButton(
-                                  child: Text("确定"),
-                                  onPressed: () {},
-                                )
-                              ],
+                            return NetLoadingDialog(
+                              loadingText: "上传图片中……",
+                              requestCallBack:
+                                  UploadService().uploadImg(formData),
                             );
                           });
+                      var resultobj = jsonDecode(res.toString());
+                      ctr_head.text = resultobj['filename'];
                     },
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
-          ),
-        );
-      },
+            Padding(
+              padding: EdgeInsets.only(bottom: 5.0),
+              child: TextFormField(
+                controller: ctr_usercode,
+                decoration: InputDecoration(
+                  icon: Icon(Icons.code),
+                  hintText: "用户编码",
+                ),
+                readOnly: true,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 5.0),
+              child: TextFormField(
+                controller: ctr_username,
+                keyboardType: TextInputType.text,
+                decoration:
+                    InputDecoration(icon: Icon(Icons.person), hintText: "用户名"),
+              ),
+            ),
+            Padding(
+                padding: EdgeInsets.only(bottom: 5.0),
+                child: TextFormField(
+                  readOnly: true,
+                  controller: ctr_sex,
+                  decoration: InputDecoration(
+                    icon: Icon(Icons.wc),
+                    hintText: "性别",
+                  ),
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return SimpleDialog(
+                            title: Text("请选择性别"),
+                            children: <Widget>[
+                              SimpleDialogOption(
+                                child: Text("男"),
+                                onPressed: () {
+                                  choosesex = 1;
+                                  ctr_sex.text = "男";
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              SimpleDialogOption(
+                                child: Text("女"),
+                                onPressed: () {
+                                  choosesex = 2;
+                                  ctr_sex.text = "女";
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        });
+                  },
+                )),
+            Padding(
+              padding: EdgeInsets.only(bottom: 5.0),
+              child: TextFormField(
+                controller: ctr_usertel,
+                keyboardType: TextInputType.phone,
+                decoration: InputDecoration(
+                    icon: Icon(Icons.stay_primary_portrait), hintText: "电话"),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 5.0),
+              child: TextFormField(
+                controller: ctr_userphone,
+                keyboardType: TextInputType.phone,
+                decoration:
+                    InputDecoration(icon: Icon(Icons.call), hintText: "座机"),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 5.0),
+              child: TextFormField(
+                controller: ctr_birthdate,
+                keyboardType: TextInputType.datetime,
+                decoration: InputDecoration(
+                    icon: Icon(Icons.date_range), hintText: "出生日期"),
+                readOnly: true,
+                onTap: () async {
+                  var d = await showDatePicker(
+                      firstDate: DateTime(1700),
+                      lastDate: DateTime(2900, 12, 31),
+                      initialDate: DateTime.now(),
+                      context: context,
+                      locale: Locale('zh'));
+                  ctr_birthdate.text = d.toString().substring(0, 10);
+                },
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 5.0),
+              child: TextFormField(
+                controller: ctr_address,
+                decoration:
+                    InputDecoration(icon: Icon(Icons.room), hintText: "通讯地址"),
+                maxLines: 2,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 40.0, bottom: 10.0),
+              child: FlatButton(
+                textColor: Colors.white,
+                color: Theme.of(context).primaryColor,
+                child: Text("确定"),
+                onPressed: () async {
+                  widget.userentity.sex = choosesex;
+                  widget.userentity.usercode = ctr_usercode.text;
+                  widget.userentity.username = ctr_username.text;
+                  widget.userentity.tel = ctr_usertel.text;
+                  widget.userentity.phone = ctr_userphone.text;
+                  widget.userentity.birthdate = ctr_birthdate.text;
+                  widget.userentity.address = ctr_address.text;
+                  widget.userentity.birthdate = ctr_birthdate.text;
+                  widget.userentity.headimg = ctr_head.text;
+                  var formdata = FormData.fromMap(widget.userentity.toJson());
+                  var result = await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return NetLoadingDialog(
+                        requestCallBack: UserService().modify(formdata),
+                      );
+                    },
+                  );
+                  var resjson = json.decode(result.toString());
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text("提示"),
+                          content: Text(resjson['msg'].toString()),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text("确定"),
+                              onPressed: () {
+                                var m = ScopedModel.of<MainProvide>(context);
+                                m.mainrouter.navigateTo(context, '/home');
+                              },
+                            )
+                          ],
+                        );
+                      });
+                },
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

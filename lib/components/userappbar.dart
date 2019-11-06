@@ -30,7 +30,6 @@ class _userappbar extends State<userappbar> {
   @override
   void didChangeDependencies() {
     mainprovide = ScopedModel.of<MainProvide>(context);
-    mainprovide.UserActionsData();
     super.didChangeDependencies();
   }
 
@@ -50,19 +49,6 @@ class _userappbar extends State<userappbar> {
           ),
           title: Text(widget.title),
           centerTitle: true,
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.save),
-              onPressed: () {
-                print("save");
-              },
-            ),
-            PopupMenuButton(
-              itemBuilder: (context) {
-                return mainprovide.useractions;
-              },
-            )
-          ],
         );
       },
     );

@@ -6,7 +6,10 @@ import 'package:flutterproject/entitys/userentity.dart';
 import 'package:flutterproject/pages/HomePage.dart';
 import 'package:flutterproject/pages/UserMgr/AddUser.dart';
 import 'package:flutterproject/pages/UserMgr/EditUser_Page.dart';
-import 'package:flutterproject/services/UserService.dart';
+import 'package:flutterproject/pages/UserPage.dart';
+import 'package:flutterproject/providers/mainprovide.dart';
+import 'package:flutterproject/tools/fluro_convert_util.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class routeconfig {
   static void configureRoutes(Router router) {
@@ -18,7 +21,6 @@ class routeconfig {
         handlerFunc: (BuildContext context, Map<String, dynamic> params) {
       return HomePage();
     }));
-
     router.define('/user/add', handler: Handler(
         handlerFunc: (BuildContext context, Map<String, List<String>> params) {
       return AddUser();
@@ -26,9 +28,12 @@ class routeconfig {
 
     router.define('/user/edit', handler: Handler(
         handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-      var userid = params['userid']?.first;
+      var userjson = params['userjson']?.first;
+      print("json---------$userjson");
+      var userentity =
+          UserModel.fromJson(FluroConvertUtils.string2map(userjson));
       return EditUser_Page(
-        userid: int.parse(userid),
+        usermodel: userentity,
       );
     }));
   }

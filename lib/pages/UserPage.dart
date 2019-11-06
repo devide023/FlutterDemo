@@ -6,7 +6,14 @@ import 'package:flutterproject/entitys/userentity.dart';
 import 'package:flutterproject/providers/mainprovide.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class UserPage extends StatelessWidget {
+class UserPage extends StatefulWidget {
+  @override
+  _UserPage createState() {
+    return _UserPage();
+  }
+}
+
+class _UserPage extends State<UserPage> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<MainProvide>(
@@ -14,7 +21,6 @@ class UserPage extends StatelessWidget {
         return FutureBuilder(
           future: model.UserList(),
           builder: (context, snapshot) {
-            print(snapshot.data);
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
                 child: CircularProgressIndicator(),
@@ -35,4 +41,9 @@ class UserPage extends StatelessWidget {
       },
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+
 }

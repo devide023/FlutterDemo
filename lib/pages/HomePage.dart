@@ -34,13 +34,12 @@ class _HomePage extends State<HomePage> with AutomaticKeepAliveClientMixin {
           drawer: Container(
             color: Colors.white,
             child: ListView(
-              children: mainprovide.userdrawer,
+              children: model.userdrawer,
             ),
           ),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: model.index,
             onTap: (index) {
-              print("index:$index");
               model.changeIndex(index);
             },
             type: BottomNavigationBarType.fixed,

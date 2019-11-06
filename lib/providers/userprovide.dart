@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterproject/config/config.dart';
+import 'package:flutterproject/entitys/userentity.dart';
 import 'package:flutterproject/services/UserService.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'dart:convert';
@@ -12,6 +13,7 @@ class UserProvide extends Model {
   List<Widget> userdrawer = [];
   List<PopupMenuItem> useractions = [];
   List userlist = [];
+  UserModel userentity;
   void SaveUserInfo(Map val) {
     _userinfo = val;
     notifyListeners();
@@ -19,9 +21,7 @@ class UserProvide extends Model {
 
   void UserActionsData() {
     UserService().actions(_userinfo['id']).then((res) {
-      print("res:$res");
       var result = json.decode(res.toString());
-      print("res:$result");
       (result['actions'] as List<dynamic>).forEach((item) {
         useractions.add(PopupMenuItem(
           child: Text(item['title'].toString()),
@@ -53,9 +53,10 @@ class UserProvide extends Model {
     UserService().drawer(_userinfo['id']).then((res) {
       if (res.toString().isNotEmpty) {
         var result = json.decode(res.toString());
-        (result as List).forEach((item) {
+        (result as List).cast().forEach((item) {
           userdrawer.add(ListTile(
-            title: item['title'],
+            leading: Icon(Icons.label),
+            title: Text(item['title'].toString()),
             trailing: Icon(Icons.keyboard_arrow_right),
             onTap: () {},
           ));
@@ -64,5 +65,11 @@ class UserProvide extends Model {
         notifyListeners();
       }
     });
+  }
+
+  void GetUserEntity(int userid) async {
+    var result = await UserService().Find(userid);
+    this.userentity = UserModel.fromJson(json.decode(result.toString()));
+    notifyListeners();
   }
 }
