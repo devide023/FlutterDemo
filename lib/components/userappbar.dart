@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterproject/config/config.dart';
 import 'package:flutterproject/pages/HomePage.dart';
 import 'package:flutterproject/pages/UserMgr/AddUser.dart';
+import 'package:flutterproject/pages/UserMgr/SearchBarDelegate.dart';
 import 'package:flutterproject/providers/mainprovide.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -49,6 +50,14 @@ class _userappbar extends State<userappbar> {
           ),
           title: Text(widget.title),
           centerTitle: true,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                showSearch(context: context, delegate: SearchBarDelegate());
+              },
+            )
+          ],
         );
       },
     );

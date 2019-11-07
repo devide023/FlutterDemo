@@ -49,4 +49,10 @@ class UserService {
         .instance
         .get('/user/find', queryParameters: {"userid": userid});
   }
+
+  Future Search(String keyword) async {
+    return await request()
+        .instance
+        .get('/user/search', queryParameters: {"keywords": keyword});
+  }
 }

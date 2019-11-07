@@ -26,6 +26,7 @@ class _AddUser extends State<AddUser> {
             userentity: UserModel(
               headimg: AppConfig.str_default_image,
               id: 0,
+              sex: 1,
             ),
             editusercode: true,
             showpasswordfiled: true,
