@@ -42,6 +42,7 @@ class UserModel {
   int _id;
   String _usercode;
   String _username;
+  String _userpwd;
   int _sex;
   String _tel;
   String _phone;
@@ -54,6 +55,7 @@ class UserModel {
       {int id,
       String usercode,
       String username,
+      String userpwd,
       int sex,
       String tel,
       String phone,
@@ -64,6 +66,7 @@ class UserModel {
     this._id = id;
     this._usercode = usercode;
     this._username = username;
+    this._userpwd = userpwd;
     this._sex = sex;
     this._tel = tel;
     this._phone = phone;
@@ -79,6 +82,8 @@ class UserModel {
   set usercode(String usercode) => _usercode = usercode;
   String get username => _username;
   set username(String username) => _username = username;
+  String get userpwd => _userpwd;
+  set userpwd(String userpwd) => _userpwd = userpwd;
   int get sex => _sex;
   set sex(int sex) => _sex = sex;
   String get tel => _tel;
@@ -98,6 +103,7 @@ class UserModel {
     _id = json['id'];
     _usercode = json['usercode'];
     _username = json['username'];
+    _userpwd = json['userpwd'];
     _sex = json['sex'];
     _tel = json['tel'];
     _phone = json['phone'];
@@ -112,6 +118,7 @@ class UserModel {
     data['id'] = this._id;
     data['usercode'] = this._usercode;
     data['username'] = this._username;
+    data['userpwd'] = this._userpwd;
     data['sex'] = this._sex;
     data['tel'] = this._tel;
     data['phone'] = this._phone;

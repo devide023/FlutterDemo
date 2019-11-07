@@ -13,8 +13,14 @@ import 'package:scoped_model/scoped_model.dart';
 
 class userform extends StatefulWidget {
   UserModel userentity;
-
-  userform({Key key, this.userentity}) : super(key: key);
+  bool showpasswordfiled;
+  bool editusercode;
+  userform(
+      {Key key,
+      this.userentity,
+      this.showpasswordfiled = false,
+      this.editusercode = false})
+      : super(key: key);
 
   @override
   _userform createState() {
@@ -26,6 +32,7 @@ class _userform extends State<userform> {
   TextEditingController ctr_usercode = TextEditingController();
   TextEditingController ctr_username = TextEditingController();
   TextEditingController ctr_usertel = TextEditingController();
+  TextEditingController ctr_userpwd = TextEditingController();
   TextEditingController ctr_userphone = TextEditingController();
   TextEditingController ctr_address = TextEditingController();
   TextEditingController ctr_birthdate = TextEditingController();
@@ -34,17 +41,54 @@ class _userform extends State<userform> {
   String temp = AppConfig.str_default_image;
   int choosesex = 1;
   @override
-  Widget build(BuildContext context) {
-    ctr_usercode.text = widget.userentity?.usercode;
-    ctr_username.text = widget.userentity?.username;
-    ctr_usertel.text = widget.userentity?.tel;
-    ctr_userphone.text = widget.userentity?.phone;
-    ctr_birthdate.text = widget.userentity?.birthdate;
-    ctr_address.text = widget.userentity?.address;
-    ctr_birthdate.text = widget.userentity?.birthdate;
-    ctr_sex.text = widget.userentity?.sex == 1 ? "男" : "女";
+  void initState() {
+    ctr_usercode.text = widget.userentity.usercode;
+    ctr_username.text = widget.userentity.username;
+    ctr_usertel.text = widget.userentity.tel;
+    ctr_userphone.text = widget.userentity.phone;
+    ctr_birthdate.text = widget.userentity.birthdate;
+    ctr_address.text = widget.userentity.address;
+    ctr_birthdate.text = widget.userentity.birthdate;
+    var sex = widget.userentity.sex;
+    if (sex == 1) {
+      ctr_sex.text = "男";
+    }
+    if (sex == 2) {
+      ctr_sex.text = "女";
+    }
     temp = widget.userentity.headimg ?? AppConfig.str_default_image;
     ctr_head.text = temp;
+    super.initState();
+  }
+
+  Widget UserPasswordField() {
+    if (widget.showpasswordfiled) {
+      return Padding(
+        padding: EdgeInsets.only(bottom: 5.0),
+        child: TextFormField(
+          controller: ctr_userpwd,
+          obscureText: true,
+          decoration: InputDecoration(
+            icon: Icon(Icons.lock_outline),
+            hintText: "用户密码",
+          ),
+        ),
+      );
+    } else {
+      return Container();
+    }
+  }
+
+  Future SubmitData(FormData formdata) {
+    if (widget.userentity.id > 0) {
+      return UserService().modify(formdata);
+    } else {
+      return UserService().add(formdata);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.0),
       child: Form(
@@ -74,7 +118,7 @@ class _userform extends State<userform> {
                           context: context,
                           builder: (context) {
                             return NetLoadingDialog(
-                              loadingText: "上传图片中……",
+                              loadingText: "文件上传中……",
                               requestCallBack:
                                   UploadService().uploadImg(formData),
                             );
@@ -94,7 +138,7 @@ class _userform extends State<userform> {
                   icon: Icon(Icons.code),
                   hintText: "用户编码",
                 ),
-                readOnly: true,
+                readOnly: !widget.editusercode,
               ),
             ),
             Padding(
@@ -106,6 +150,7 @@ class _userform extends State<userform> {
                     InputDecoration(icon: Icon(Icons.person), hintText: "用户名"),
               ),
             ),
+            UserPasswordField(),
             Padding(
                 padding: EdgeInsets.only(bottom: 5.0),
                 child: TextFormField(
@@ -205,12 +250,13 @@ class _userform extends State<userform> {
                   widget.userentity.address = ctr_address.text;
                   widget.userentity.birthdate = ctr_birthdate.text;
                   widget.userentity.headimg = ctr_head.text;
+                  widget.userentity.userpwd = ctr_userpwd.text;
                   var formdata = FormData.fromMap(widget.userentity.toJson());
                   var result = await showDialog(
                     context: context,
                     builder: (context) {
                       return NetLoadingDialog(
-                        requestCallBack: UserService().modify(formdata),
+                        requestCallBack: SubmitData(formdata),
                       );
                     },
                   );
