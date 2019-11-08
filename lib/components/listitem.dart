@@ -1,9 +1,12 @@
+import 'dart:convert';
+
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterproject/config/config.dart';
 import 'package:flutterproject/entitys/userentity.dart';
 import 'package:flutterproject/pages/UserMgr/EditUser_Page.dart';
 import 'package:flutterproject/providers/mainprovide.dart';
-import 'package:flutterproject/tools/fluro_convert_util.dart';
+import 'package:flutterproject/services/UserService.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class listitem extends StatefulWidget {
@@ -77,7 +80,13 @@ class _listitem extends State<listitem> {
                             actions: <Widget>[
                               FlatButton(
                                 child: Text("确定"),
-                                onPressed: () {},
+                                onPressed: () async {
+                                  var res = await UserService()
+                                      .remove(widget.userobj.id);
+                                  BotToast.showText(
+                                      text: jsonDecode(res.toString())['msg']);
+                                  Navigator.of(context).pop();
+                                },
                               ),
                               FlatButton(
                                 child: Text("取消"),
@@ -90,6 +99,65 @@ class _listitem extends State<listitem> {
                         });
                     break;
                   case 'enable':
+                    break;
+                  case 'setpwd':
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          TextEditingController ctr_setpwd =
+                              TextEditingController();
+                          return Dialog(
+                              child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 15.0),
+                            height: 150.0,
+                            child: Column(
+                              children: <Widget>[
+                                Padding(
+                                  padding:
+                                      EdgeInsets.only(top: 20.0, bottom: 15.0),
+                                  child: TextField(
+                                    decoration:
+                                        InputDecoration(hintText: "新密码"),
+                                    controller: ctr_setpwd,
+                                    obscureText: true,
+                                  ),
+                                ),
+                                ButtonTheme.bar(
+                                  child: ButtonBar(
+                                    children: <Widget>[
+                                      FlatButton(
+                                        child: Text("确定"),
+                                        onPressed: () async {
+                                          var newpwd = ctr_setpwd.text;
+                                          var res = await UserService().setpwd(
+                                              widget.userobj.id, newpwd);
+                                          print(
+                                              "userid:${widget.userobj.id},userpwd:$newpwd");
+                                          var result =
+                                              jsonDecode(res.toString());
+                                          BotToast.showText(
+                                            text: result['msg'],
+                                          );
+                                          if (result['code'] == 1) {
+                                            Navigator.of(context).pop();
+                                          }
+                                        },
+                                      ),
+                                      FlatButton(
+                                        textColor:
+                                            Theme.of(context).primaryColor,
+                                        child: Text("取消"),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ));
+                        });
                     break;
                 }
               },
@@ -106,6 +174,10 @@ class _listitem extends State<listitem> {
                   PopupMenuItem(
                     value: 'enabel',
                     child: Text("启用"),
+                  ),
+                  PopupMenuItem(
+                    value: 'setpwd',
+                    child: Text("重置密码"),
                   )
                 ];
               },

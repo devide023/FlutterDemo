@@ -50,6 +50,18 @@ class UserService {
         .get('/user/find', queryParameters: {"userid": userid});
   }
 
+  Future remove(int userid) async {
+    return await request()
+        .instance
+        .get('/user/del', queryParameters: {"userid": userid});
+  }
+
+  Future setpwd(int userid, String newpwd) async {
+    return await request()
+        .instance
+        .post('/user/setpwd', data: {"userid": userid, "newpwd": newpwd});
+  }
+
   Future Search(String keyword) async {
     return await request()
         .instance

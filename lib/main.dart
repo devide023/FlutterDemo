@@ -7,6 +7,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'config/config.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:bot_toast/bot_toast.dart';
 
 void main() {
   runApp(MyApp());
@@ -35,22 +36,25 @@ class _MyApp extends State<MyApp> {
   Widget build(BuildContext context) {
     return ScopedModel<MainProvide>(
       model: mainprovide,
-      child: MaterialApp(
-        title: AppConfig.str_Appname,
-        theme: ThemeData(
-          primarySwatch: Colors.deepOrange,
+      child: BotToastInit(
+        child: MaterialApp(
+          title: AppConfig.str_Appname,
+          theme: ThemeData(
+            primarySwatch: Colors.deepOrange,
+          ),
+          home: Login(),
+          debugShowCheckedModeBanner: false,
+          onGenerateRoute: router.generator,
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          supportedLocales: [
+            const Locale('zh', 'CH'),
+            const Locale('en', 'US'),
+          ],
+          navigatorObservers: [BotToastNavigatorObserver()],
         ),
-        home: Login(),
-        debugShowCheckedModeBanner: false,
-        onGenerateRoute: router.generator,
-        localizationsDelegates: [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
-        supportedLocales: [
-          const Locale('zh', 'CH'),
-          const Locale('en', 'US'),
-        ],
       ),
     );
   }

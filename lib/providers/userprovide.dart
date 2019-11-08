@@ -6,8 +6,6 @@ import 'package:flutterproject/services/UserService.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'dart:convert';
 
-import 'mainprovide.dart';
-
 class UserProvide extends Model {
   Map _userinfo;
   List<Widget> userdrawer = [];
@@ -62,7 +60,6 @@ class UserProvide extends Model {
           ));
           userdrawer.add(Divider());
         });
-        notifyListeners();
       }
     });
   }

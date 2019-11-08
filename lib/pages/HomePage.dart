@@ -15,12 +15,12 @@ class _HomePage extends State<HomePage> with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
+    mainprovide = ScopedModel.of<MainProvide>(context);
+    mainprovide.UserDrawerdata();
   }
 
   @override
   void didChangeDependencies() {
-    mainprovide = ScopedModel.of<MainProvide>(context);
-    mainprovide.UserDrawerdata();
     super.didChangeDependencies();
   }
 
