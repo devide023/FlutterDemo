@@ -34,60 +34,31 @@ class _UserDetail extends State<UserDetail_Page> {
                   return [
                     PopupMenuItem(
                       value: "edit_header",
-                      child: Row(
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(right: 10.0),
-                            child: Icon(Icons.image),
-                          ),
-                          Padding(
-                              padding: EdgeInsets.only(left: 10.0),
-                              child: Text("上传头像")),
-                        ],
+                      child: ListTile(
+                        leading: Icon(Icons.image),
+                        title: Text("上传头像"),
                       ),
                     ),
                     PopupMenuItem(
                       value: "edit_password",
-                      child: Row(
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(right: 10.0),
-                            child: Icon(Icons.lock_open),
-                          ),
-                          Padding(
-                              padding: EdgeInsets.only(left: 10.0),
-                              child: Text("修改密码")),
-                        ],
+                      child: ListTile(
+                        leading: Icon(Icons.lock_open),
+                        title: Text("修改密码"),
                       ),
                     ),
                     PopupMenuItem(
                       value: "disable",
-                      child: Row(
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(right: 10.0),
-                            child: Icon(Icons.stop),
-                          ),
-                          Padding(
-                              padding: EdgeInsets.only(left: 10.0),
-                              child: Text("禁用")),
-                        ],
+                      child: ListTile(
+                        leading: Icon(Icons.stop),
+                        title: Text("禁用"),
                       ),
                     ),
                     PopupMenuItem(
-                      value: "enable",
-                      child: Row(
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(right: 10.0),
-                            child: Icon(Icons.play_arrow),
-                          ),
-                          Padding(
-                              padding: EdgeInsets.only(left: 10.0),
-                              child: Text("启用")),
-                        ],
-                      ),
-                    ),
+                        value: "enable",
+                        child: ListTile(
+                          leading: Icon(Icons.play_arrow),
+                          title: Text("启用"),
+                        )),
                   ];
                 },
                 onSelected: (v) {
@@ -189,7 +160,7 @@ class _UserDetail extends State<UserDetail_Page> {
                 padding: EdgeInsets.symmetric(horizontal: 3.0),
                 child: ListTile(
                   leading: Icon(Icons.calendar_today),
-                  title: Text(widget.userinfo.birthdate),
+                  title: Text(widget.userinfo.birthdate ?? ""),
                   trailing: Icon(Icons.keyboard_arrow_right),
                 ),
               ),
