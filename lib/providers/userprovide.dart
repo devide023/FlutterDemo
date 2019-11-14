@@ -30,9 +30,9 @@ class UserProvide extends Model {
     });
   }
 
-  Future UserList() async {
-    Response res = await UserService().list();
-    return json.decode(res.data.toString());
+  Future UserList(FormData data) async {
+    Response res = await UserService().list(data);
+    return json.decode(res.data.toString())['list'];
   }
 
   void UserDrawerdata() {

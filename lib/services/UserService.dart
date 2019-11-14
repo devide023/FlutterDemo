@@ -22,9 +22,9 @@ class UserService {
     }
   }
 
-  Future list() async {
+  Future list(FormData data) async {
     request q = request();
-    Response res = await q.instance.post('/user/list');
+    Response res = await q.instance.post('/user/list', data: data);
     return res;
   }
 

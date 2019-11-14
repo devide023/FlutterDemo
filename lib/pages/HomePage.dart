@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterproject/config/config.dart';
 import 'package:flutterproject/providers/mainprovide.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -26,6 +27,9 @@ class _HomePage extends State<HomePage> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.instance =
+        ScreenUtil(width: 750, height: 1334, allowFontScaling: true)
+          ..init(context);
     return ScopedModelDescendant<MainProvide>(
       builder: (context, child, model) {
         return Scaffold(

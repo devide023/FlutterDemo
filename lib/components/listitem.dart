@@ -7,6 +7,7 @@ import 'package:flutterproject/entitys/userentity.dart';
 import 'package:flutterproject/pages/UserMgr/EditUser_Page.dart';
 import 'package:flutterproject/providers/mainprovide.dart';
 import 'package:flutterproject/services/UserService.dart';
+import 'package:flutterproject/tools/fluro_convert_util.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class listitem extends StatefulWidget {
@@ -58,6 +59,12 @@ class _listitem extends State<listitem> {
             child: PopupMenuButton(
               onSelected: (v) {
                 switch (v) {
+                  case "detail":
+                    String userjson =
+                        FluroConvertUtils.object2string(widget.userobj);
+                    model.mainrouter
+                        .navigateTo(context, '/user/detail?userinfo=$userjson');
+                    break;
                   case 'edit':
                     Navigator.of(context)
                         .push(MaterialPageRoute(builder: (context) {
@@ -164,21 +171,25 @@ class _listitem extends State<listitem> {
               itemBuilder: (context) {
                 return <PopupMenuItem>[
                   PopupMenuItem(
-                    value: 'edit',
-                    child: Text("编辑"),
+                    value: 'detail',
+                    child: Text("详情"),
                   ),
-                  PopupMenuItem(
-                    value: 'del',
-                    child: Text("删除"),
-                  ),
-                  PopupMenuItem(
-                    value: 'enabel',
-                    child: Text("启用"),
-                  ),
-                  PopupMenuItem(
-                    value: 'setpwd',
-                    child: Text("重置密码"),
-                  )
+                  // PopupMenuItem(
+                  //   value: 'edit',
+                  //   child: Text("编辑"),
+                  // ),
+                  // PopupMenuItem(
+                  //   value: 'del',
+                  //   child: Text("删除"),
+                  // ),
+                  // PopupMenuItem(
+                  //   value: 'enabel',
+                  //   child: Text("启用"),
+                  // ),
+                  // PopupMenuItem(
+                  //   value: 'setpwd',
+                  //   child: Text("重置密码"),
+                  // )
                 ];
               },
             ),

@@ -1,10 +1,14 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart' show StatelessWidget;
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutter_easyrefresh/material_header.dart';
 import 'package:flutterproject/components/listitem.dart';
 import 'package:flutterproject/entitys/userentity.dart';
-import 'package:flutterproject/providers/mainprovide.dart';
-import 'package:scoped_model/scoped_model.dart';
+import 'package:flutterproject/services/UserService.dart';
 
 class UserPage extends StatefulWidget {
   @override
@@ -14,36 +18,71 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPage extends State<UserPage> with AutomaticKeepAliveClientMixin {
-  @override
-  Widget build(BuildContext context) {
-    return ScopedModelDescendant<MainProvide>(
-      builder: (context, child, model) {
-        return FutureBuilder(
-          future: model.UserList(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            } else {
-              var list = userentity.fromJson(snapshot.data).userlist;
-              return ListView.builder(
-                itemCount: list.length,
-                itemBuilder: (context, index) {
-                  return listitem(
-                    userobj: list[index],
-                  );
-                },
-              );
-            }
-          },
-        );
-      },
-    );
+  List<UserModel> list = List();
+  int pagesize = 10; //每页数量
+  int pageindex = 1; //页索引
+  int pagecount = 0;
+  EasyRefreshController _controller;
+  Future<List<UserModel>> GetUserData() async {
+    List<UserModel> datalist = [];
+    var data = FormData.fromMap({"per_page": pagesize, "page": pageindex});
+    var result = await UserService().list(data);
+    var pageinfo = jsonDecode(result.toString())['list'];
+    pagecount = pageinfo['last_page'];
+    (pageinfo['data'] as List).forEach((item) {
+      datalist.add(UserModel.fromJson(item));
+    });
+    return datalist;
   }
 
   @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
+  void initState() {
+    _controller = EasyRefreshController();
+    super.initState();
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    return EasyRefresh(
+        firstRefresh: true,
+        controller: _controller,
+        header: MaterialHeader(),
+        footer: ClassicalFooter(
+            loadingText: "努力加载中……",
+            loadedText: "加载完成",
+            noMoreText: "没有内容了",
+            infoText: "更新于%T"),
+        firstRefreshWidget: Center(
+          child: CircularProgressIndicator(),
+        ),
+        child: ListView.builder(
+          itemCount: list.length,
+          itemBuilder: (context, index) {
+            return listitem(
+              userobj: list[index],
+            );
+          },
+        ),
+        onRefresh: () async {
+          pageindex = 1;
+          var data = await GetUserData();
+          setState(() {
+            list.clear();
+            list.addAll(data);
+          });
+          _controller.resetLoadState();
+          _controller.finishRefresh();
+        },
+        onLoad: () async {
+          pageindex++;
+          var data = await GetUserData();
+          setState(() {
+            list.addAll(data);
+          });
+          _controller.finishLoad(noMore: pageindex > pagecount);
+        });
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 }
