@@ -7,6 +7,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_easyrefresh/material_header.dart';
 import 'package:flutterproject/components/listitem.dart';
+import 'package:flutterproject/components/userappbar.dart';
+import 'package:flutterproject/config/config.dart';
 import 'package:flutterproject/entitys/userentity.dart';
 import 'package:flutterproject/services/UserService.dart';
 
@@ -43,44 +45,49 @@ class _UserPage extends State<UserPage> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
-    return EasyRefresh(
-        firstRefresh: true,
-        controller: _controller,
-        header: MaterialHeader(),
-        footer: ClassicalFooter(
-            loadingText: "努力加载中……",
-            loadedText: "加载完成",
-            noMoreText: "没有内容了",
-            infoText: "更新于%T"),
-        firstRefreshWidget: Center(
-          child: CircularProgressIndicator(),
-        ),
-        child: ListView.builder(
-          itemCount: list.length,
-          itemBuilder: (context, index) {
-            return listitem(
-              userobj: list[index],
-            );
+    return Scaffold(
+      appBar: userappbar(
+        title: AppConfig.str_userlist,
+      ),
+      body: EasyRefresh(
+          firstRefresh: true,
+          controller: _controller,
+          header: MaterialHeader(),
+          footer: ClassicalFooter(
+              loadingText: "努力加载中……",
+              loadedText: "加载完成",
+              noMoreText: "没有内容了",
+              infoText: "更新于%T"),
+          firstRefreshWidget: Center(
+            child: CircularProgressIndicator(),
+          ),
+          child: ListView.builder(
+            itemCount: list.length,
+            itemBuilder: (context, index) {
+              return listitem(
+                userobj: list[index],
+              );
+            },
+          ),
+          onRefresh: () async {
+            pageindex = 1;
+            var data = await GetUserData();
+            setState(() {
+              list.clear();
+              list.addAll(data);
+            });
+            _controller.resetLoadState();
+            _controller.finishRefresh();
           },
-        ),
-        onRefresh: () async {
-          pageindex = 1;
-          var data = await GetUserData();
-          setState(() {
-            list.clear();
-            list.addAll(data);
-          });
-          _controller.resetLoadState();
-          _controller.finishRefresh();
-        },
-        onLoad: () async {
-          pageindex++;
-          var data = await GetUserData();
-          setState(() {
-            list.addAll(data);
-          });
-          _controller.finishLoad(noMore: pageindex > pagecount);
-        });
+          onLoad: () async {
+            pageindex++;
+            var data = await GetUserData();
+            setState(() {
+              list.addAll(data);
+            });
+            _controller.finishLoad(noMore: pageindex > pagecount);
+          }),
+    );
   }
 
   @override

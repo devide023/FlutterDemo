@@ -2,10 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutterproject/entitys/userentity.dart';
-import 'package:flutterproject/providers/mainprovide.dart';
+import 'package:flutterproject/route/application.dart';
 import 'package:flutterproject/services/UserService.dart';
 import 'package:flutterproject/tools/fluro_convert_util.dart';
-import 'package:scoped_model/scoped_model.dart';
 
 class SearchBarDelegate extends SearchDelegate {
   List<UserModel> users;
@@ -55,10 +54,10 @@ class SearchBarDelegate extends SearchDelegate {
           ),
           onTap: () {
             print(users[index].id);
-            var model = ScopedModel.of<MainProvide>(context);
             var json = FluroConvertUtils.object2string(users[index]);
             print("json----$json");
-            model.mainrouter.navigateTo(context, '/user/detail?userinfo=$json');
+            Application.router
+                .navigateTo(context, '/user/detail?userinfo=$json');
           },
         );
       },
@@ -92,10 +91,9 @@ class SearchBarDelegate extends SearchDelegate {
               ),
               onTap: () {
                 print(userobj.id);
-                var model = ScopedModel.of<MainProvide>(context);
                 var json = FluroConvertUtils.object2string(userobj);
                 print("json--suggest--$json");
-                model.mainrouter
+                Application.router
                     .navigateTo(context, '/user/detail?userinfo=$json');
               },
             );

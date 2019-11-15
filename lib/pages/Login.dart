@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutterproject/db/DatabaseHelper.dart';
 import 'package:flutterproject/pages/HomePage.dart';
-import 'package:flutterproject/providers/mainprovide.dart';
+import 'package:flutterproject/providers/userprovide.dart';
 import 'package:flutterproject/public/NetLoadingDialog.dart';
 import 'package:flutterproject/services/UserService.dart';
-import 'package:scoped_model/scoped_model.dart';
+import 'package:provide/provide.dart';
 import 'dart:convert';
-
-import 'package:sqflite/sqflite.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -18,7 +15,7 @@ class Login extends StatefulWidget {
 
 class _Login extends State<Login> {
   GlobalKey _formkey = GlobalKey<FormState>();
-  Future _systemlogin(String user, String pwd, MainProvide model) async {
+  Future _systemlogin(String user, String pwd) async {
     try {
       showDialog(
           context: context,
@@ -31,7 +28,7 @@ class _Login extends State<Login> {
           }).then((res) {
         var result = json.decode(res);
         if (result['user'] != null) {
-          model.SaveUserInfo(result['user']);
+          Provide.value<UserProvide>(context).SaveUserInfo(result['user']);
         }
         showDialog(
             context: context,
@@ -81,7 +78,7 @@ class _Login extends State<Login> {
   Widget build(BuildContext context) {
     TextEditingController _ctrusername = TextEditingController();
     TextEditingController _ctrusepwd = TextEditingController();
-    return ScopedModelDescendant<MainProvide>(
+    return Provide<UserProvide>(
       builder: (context, child, model) {
         return Material(
           child: Container(
@@ -153,7 +150,7 @@ class _Login extends State<Login> {
                               if (form.validate()) {
                                 var uname = _ctrusername.text;
                                 var upwd = _ctrusepwd.text;
-                                _systemlogin(uname, upwd, model);
+                                _systemlogin(uname, upwd);
                               }
                             },
                             child: Text("登录"),

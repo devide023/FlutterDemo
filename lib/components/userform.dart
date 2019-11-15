@@ -5,10 +5,10 @@ import 'package:flutterproject/config/config.dart';
 import 'package:flutterproject/entitys/userentity.dart';
 import 'package:flutterproject/providers/mainprovide.dart';
 import 'package:flutterproject/public/NetLoadingDialog.dart';
+import 'package:flutterproject/route/application.dart';
 import 'package:flutterproject/services/UploadService.dart';
 import 'package:flutterproject/services/UserService.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:scoped_model/scoped_model.dart';
 
 class userform extends StatefulWidget {
   UserModel userentity;
@@ -271,8 +271,7 @@ class _userform extends State<userform> {
                             FlatButton(
                               child: Text("确定"),
                               onPressed: () {
-                                var m = ScopedModel.of<MainProvide>(context);
-                                m.mainrouter.navigateTo(context, '/home');
+                                Application.router.navigateTo(context, '/home');
                               },
                             )
                           ],

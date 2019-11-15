@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutterproject/config/config.dart';
 import 'package:flutterproject/entitys/userentity.dart';
 import 'package:flutterproject/services/UserService.dart';
-import 'package:scoped_model/scoped_model.dart';
 import 'dart:convert';
 
-class UserProvide extends Model {
+class UserProvide with ChangeNotifier {
   Map _userinfo;
   List<Widget> userdrawer = [];
   List<PopupMenuItem> useractions = [];
@@ -15,19 +14,6 @@ class UserProvide extends Model {
   void SaveUserInfo(Map val) {
     _userinfo = val;
     notifyListeners();
-  }
-
-  void UserActionsData() {
-    UserService().actions(_userinfo['id']).then((res) {
-      var result = json.decode(res.toString());
-      (result['actions'] as List<dynamic>).forEach((item) {
-        useractions.add(PopupMenuItem(
-          child: Text(item['title'].toString()),
-          value: item['code'].toString(),
-        ));
-      });
-      notifyListeners();
-    });
   }
 
   Future UserList(FormData data) async {

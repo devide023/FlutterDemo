@@ -1,6 +1,6 @@
-import 'package:scoped_model/scoped_model.dart';
+import 'package:flutter/material.dart';
 
-class MyProvide extends Model {
+class MyProvide with ChangeNotifier {
   int _index = 0;
   int _sex = 1;
   Map _prouctlist;

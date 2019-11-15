@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutterproject/config/config.dart';
 import 'package:flutterproject/providers/mainprovide.dart';
-import 'package:scoped_model/scoped_model.dart';
+import 'package:flutterproject/providers/myprovide.dart';
+import 'package:flutterproject/providers/userprovide.dart';
+import 'package:provide/provide.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'MyPage.dart';
+import 'ProductListPage.dart';
+import 'UserPage.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -12,17 +18,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> with AutomaticKeepAliveClientMixin {
-  MainProvide mainprovide;
+  UserProvide userprovide;
   @override
   void initState() {
     super.initState();
-    mainprovide = ScopedModel.of<MainProvide>(context);
-    mainprovide.UserDrawerdata();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    userprovide = Provide.value<UserProvide>(context);
+    userprovide.UserDrawerdata();
   }
 
   @override
@@ -30,21 +36,24 @@ class _HomePage extends State<HomePage> with AutomaticKeepAliveClientMixin {
     ScreenUtil.instance =
         ScreenUtil(width: 750, height: 1334, allowFontScaling: true)
           ..init(context);
-    return ScopedModelDescendant<MainProvide>(
-      builder: (context, child, model) {
+    return ProvideMulti(
+      requestedValues: [MyProvide, MainProvide, UserProvide],
+      builder: (context, child, vals) {
         return Scaffold(
-          appBar: model.mainappbars[model.index],
-          body: model.mainpages[model.index],
           drawer: Container(
             color: Colors.white,
-            child: ListView(
-              children: model.userdrawer,
+            child: Column(
+              children: vals.get<UserProvide>().userdrawer,
             ),
           ),
+          body: IndexedStack(
+            index: vals.get<MyProvide>().index,
+            children: [UserPage(), ProductListPage(), MyPage()],
+          ),
           bottomNavigationBar: BottomNavigationBar(
-            currentIndex: model.index,
+            currentIndex: vals.get<MyProvide>().index,
             onTap: (index) {
-              model.changeIndex(index);
+              vals.get<MyProvide>().changeIndex(index);
             },
             type: BottomNavigationBarType.fixed,
             items: [

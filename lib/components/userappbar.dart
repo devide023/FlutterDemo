@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutterproject/config/config.dart';
-import 'package:flutterproject/pages/HomePage.dart';
-import 'package:flutterproject/pages/UserMgr/AddUser.dart';
 import 'package:flutterproject/pages/UserMgr/SearchBarDelegate.dart';
 import 'package:flutterproject/providers/mainprovide.dart';
-import 'package:scoped_model/scoped_model.dart';
+import 'package:flutterproject/route/application.dart';
+import 'package:provide/provide.dart';
 
 class userappbar extends StatefulWidget with PreferredSizeWidget {
   String title;
@@ -22,7 +21,6 @@ class userappbar extends StatefulWidget with PreferredSizeWidget {
 }
 
 class _userappbar extends State<userappbar> {
-  MainProvide mainprovide;
   @override
   void initState() {
     super.initState();
@@ -30,13 +28,12 @@ class _userappbar extends State<userappbar> {
 
   @override
   void didChangeDependencies() {
-    mainprovide = ScopedModel.of<MainProvide>(context);
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModelDescendant<MainProvide>(
+    return Provide<MainProvide>(
       builder: (context, child, model) {
         return AppBar(
           leading: IconButton(
@@ -45,7 +42,7 @@ class _userappbar extends State<userappbar> {
               // Navigator.of(context).push(MaterialPageRoute(builder: (context) {
               //   return AddUser();
               // }));
-              model.mainrouter.navigateTo(context, '/user/add');
+              Application.router.navigateTo(context, '/user/add');
             },
           ),
           title: Text(widget.title),

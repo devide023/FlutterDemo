@@ -5,10 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutterproject/config/config.dart';
 import 'package:flutterproject/entitys/userentity.dart';
 import 'package:flutterproject/pages/UserMgr/EditUser_Page.dart';
-import 'package:flutterproject/providers/mainprovide.dart';
 import 'package:flutterproject/services/UserService.dart';
 import 'package:flutterproject/tools/fluro_convert_util.dart';
-import 'package:scoped_model/scoped_model.dart';
+import '../route/application.dart';
 
 class listitem extends StatefulWidget {
   UserModel userobj;
@@ -20,7 +19,6 @@ class listitem extends StatefulWidget {
 class _listitem extends State<listitem> {
   @override
   Widget build(BuildContext context) {
-    var model = ScopedModel.of<MainProvide>(context);
     var tempname = AppConfig.str_default_image;
     if (widget.userobj.headimg != null) {
       tempname = widget.userobj.headimg;
@@ -62,7 +60,7 @@ class _listitem extends State<listitem> {
                   case "detail":
                     String userjson =
                         FluroConvertUtils.object2string(widget.userobj);
-                    model.mainrouter
+                    Application.router
                         .navigateTo(context, '/user/detail?userinfo=$userjson');
                     break;
                   case 'edit':
