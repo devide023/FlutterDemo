@@ -1,11 +1,7 @@
 import 'dart:convert';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterproject/config/config.dart';
-import 'package:flutterproject/providers/mainprovide.dart';
 import 'package:flutterproject/services/HomeService.dart';
-import 'package:flutterproject/services/UserService.dart';
-import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
