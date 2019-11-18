@@ -28,7 +28,9 @@ class _Login extends State<Login> {
           }).then((res) {
         var result = json.decode(res);
         if (result['user'] != null) {
-          Provide.value<UserProvide>(context).SaveUserInfo(result['user']);
+          var provide = Provide.value<UserProvide>(context);
+          provide.SaveUserInfo(result['user']);
+          provide.UserDrawerdata(result['user']['id']);
         }
         showDialog(
             context: context,

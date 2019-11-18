@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterproject/components/drawer_index.dart';
 import 'package:flutterproject/config/config.dart';
 import 'package:flutterproject/providers/mainprovide.dart';
 import 'package:flutterproject/providers/myprovide.dart';
@@ -27,8 +28,6 @@ class _HomePage extends State<HomePage> with AutomaticKeepAliveClientMixin {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    userprovide = Provide.value<UserProvide>(context);
-    userprovide.UserDrawerdata();
   }
 
   @override
@@ -40,12 +39,7 @@ class _HomePage extends State<HomePage> with AutomaticKeepAliveClientMixin {
       requestedValues: [MyProvide, MainProvide, UserProvide],
       builder: (context, child, vals) {
         return Scaffold(
-          drawer: Container(
-            color: Colors.white,
-            child: Column(
-              children: vals.get<UserProvide>().userdrawer,
-            ),
-          ),
+          drawer: DrawerIndex(),
           body: IndexedStack(
             index: vals.get<MyProvide>().index,
             children: [UserPage(), ProductListPage(), MyPage()],

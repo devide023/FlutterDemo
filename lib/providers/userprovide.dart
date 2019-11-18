@@ -1,18 +1,19 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterproject/config/config.dart';
 import 'package:flutterproject/entitys/userentity.dart';
 import 'package:flutterproject/services/UserService.dart';
 import 'dart:convert';
 
 class UserProvide with ChangeNotifier {
   Map _userinfo;
-  List<Widget> userdrawer = [];
+  Widget userdrawer;
   List<PopupMenuItem> useractions = [];
   List userlist = [];
+  List userdrawerdata = [];
   UserModel userentity;
   void SaveUserInfo(Map val) {
     _userinfo = val;
+    userentity = UserModel.fromJson(val);
     notifyListeners();
   }
 
@@ -21,31 +22,12 @@ class UserProvide with ChangeNotifier {
     return json.decode(res.data.toString())['list'];
   }
 
-  void UserDrawerdata() {
-    userdrawer.add(UserAccountsDrawerHeader(
-      accountName: Text(_userinfo['username'].toString()),
-      accountEmail: Text(_userinfo['usercode']?.toString()),
-      onDetailsPressed: () {},
-      decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage("lib/image/headbg.jpg"), fit: BoxFit.fill)),
-      currentAccountPicture: CircleAvatar(
-        backgroundImage: NetworkImage(AppConfig.str_imgurl +
-            (_userinfo['headimg'] ?? "default_head.jpg")),
-      ),
-    ));
-    UserService().drawer(_userinfo['id']).then((res) {
+  void UserDrawerdata(int userid) {
+    UserService().drawer(userid).then((res) {
       if (res.toString().isNotEmpty) {
         var result = json.decode(res.toString());
-        (result as List).cast().forEach((item) {
-          userdrawer.add(ListTile(
-            leading: Icon(Icons.label),
-            title: Text(item['title'].toString()),
-            trailing: Icon(Icons.keyboard_arrow_right),
-            onTap: () {},
-          ));
-          userdrawer.add(Divider());
-        });
+        userdrawerdata = result;
+        notifyListeners();
       }
     });
   }
