@@ -1,17 +1,9 @@
 import 'dart:async';
-
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
 
 class DatabaseHelper {
-  static final DatabaseHelper _instance = DatabaseHelper.internal();
-
-  factory DatabaseHelper() => _instance;
-
   static Database _db;
-
-  DatabaseHelper.internal();
-
   Future<Database> get db async {
     if (_db != null) {
       return _db;
@@ -22,29 +14,27 @@ class DatabaseHelper {
   }
 
   initDb() async {
-    String databasesPath = await getDatabasesPath();
-    String path = join(databasesPath, 'mydata.db');
-
-//    await deleteDatabase(path); // just for testing
-
-    var db = await openDatabase(path, version: 1, onCreate: _onCreate);
+    final fileDirectory = await getApplicationDocumentsDirectory();
+    final dbPath = fileDirectory.path;
+    var db = await openDatabase(dbPath + '/mydatabase.db',
+        version: 1, onCreate: _onCreate);
     return db;
   }
 
   void _onCreate(Database db, int newVersion) async {
     String sql = '''
           CREATE TABLE sys_user (
-            id INTEGER, 
+            id INTEGER PRIMARY KEY AUTOINCREMENT, 
             status INTEGER, 
             usercode TEXT, 
             username TEXT, 
             userpwd TEXT, 
             headimg TEXT, 
-            tel text, 
-            phone text, 
-            address text, 
+            tel TEXT, 
+            phone TEXT, 
+            address TEXT, 
             birthdate NUMERIC, 
-            sex integer, 
+            sex INTEGER, 
             addtime NUMERIC
             )
           ''';
