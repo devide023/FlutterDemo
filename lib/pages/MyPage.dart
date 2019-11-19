@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutterproject/db/DatabaseHelper.dart';
+import 'package:flutterproject/db/userdao.dart';
+import 'package:flutterproject/entitys/userentity.dart';
+import 'package:flutterproject/providers/userprovide.dart';
+import 'package:provide/provide.dart';
 
 class MyPage extends StatefulWidget {
   MyPage({Key key}) : super(key: key);
@@ -57,13 +61,7 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
             child: FlatButton(
               child: Text("sqflite test"),
               onPressed: () {
-                var mydb = DatabaseHelper();
-                mydb.db.then((_db) {
-                  _db.transaction((trans) async {
-                    return await trans.rawInsert(
-                        "insert into sys_user(usercode,username) values('0002','admin')");
-                  });
-                });
+
               },
             ),
           ),
@@ -72,15 +70,23 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
               onPressed: () {
                 var dh = DatabaseHelper();
                 dh.db.then((_db) async {
-                  var list = await _db.rawQuery("select * from sys_user");
-                  print("=====sqflite====list->${list.length}");
+                  List<Map> list = await _db.rawQuery("select id,usercode,username,userpwd,userid from sys_user");
+                  for(var item in list){
+                    print("=====sqflite====list->id:${item['id']}--${item['usercode']} username->${item['username']}->userid->${item['userid']}");
+                  }
+
                 });
               },
               child: Text("获取数据"),
             ),
           ),
           Center(
-            child: Text("tab3"),
+            child:RaisedButton(onPressed: () async {
+              var uid = Provide.value<UserProvide>(context).userentity.id;
+              print("======uid=====$uid");
+              UserModel entity = await Userdao.GetUserInfo(uid);
+              print("======UserModel=====${entity.id}->${entity.usercode}->${entity.username}->${entity.birthdate}");
+            },child: Text("获取本地用户信息"),),
           ),
           Center(
             child: Text("tab4"),

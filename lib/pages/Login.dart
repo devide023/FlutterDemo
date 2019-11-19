@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterproject/db/userdao.dart';
 import 'package:flutterproject/pages/HomePage.dart';
 import 'package:flutterproject/providers/userprovide.dart';
 import 'package:flutterproject/public/NetLoadingDialog.dart';
@@ -31,6 +32,7 @@ class _Login extends State<Login> {
           var provide = Provide.value<UserProvide>(context);
           provide.SaveUserInfo(result['user']);
           provide.UserDrawerdata(result['user']['id']);
+          Userdao.SaveUserInfo(result['user']);
         }
         showDialog(
             context: context,
