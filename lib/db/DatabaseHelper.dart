@@ -16,7 +16,7 @@ class DatabaseHelper {
     return _db;
   }
 
-  initDb() async {
+  Future<Database> initDb() async {
     final fileDirectory = await getApplicationDocumentsDirectory();
     final dbPath = join(fileDirectory.path, 'mydatabase.db');
     print("dbpath========$dbPath");
@@ -39,8 +39,7 @@ class DatabaseHelper {
   }
 
   void _onUpgrade(Database db, int oldversion, int newsersion) async {
-    print("oldversion=====$oldversion");
-    print("newversion=====$newsersion");
+    print("===========迁移数据库,原版本:$oldversion,新版本:$newsersion==============");
     var batch = db.batch();
     InitDataBase.CreateTable_SysUser_v1(batch);
     InitDataBase.CreateTable_SysRole_v1(batch);
