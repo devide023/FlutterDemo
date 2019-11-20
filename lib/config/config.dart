@@ -1,5 +1,5 @@
 class AppConfig {
-  static String str_Appname = '我的App';
+  static String str_Appname = '黄金游轮';
   static String str_userlist = "用户列表";
   static String str_my = "我的";
   static String str_productlist = "产品列表";

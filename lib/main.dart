@@ -1,11 +1,8 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutterproject/db/DatabaseHelper.dart';
 import 'package:flutterproject/pages/Login.dart';
-import 'package:flutterproject/pages/MyPage.dart';
-import 'package:flutterproject/pages/ProductListPage.dart';
-import 'package:flutterproject/pages/UserPage.dart';
 import 'package:flutterproject/providers/mainprovide.dart';
 import 'package:flutterproject/providers/myprovide.dart';
 import 'package:flutterproject/providers/userprovide.dart';
@@ -16,7 +13,6 @@ import 'config/config.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:bot_toast/bot_toast.dart';
-
 void main() {
   final providers = Providers();
   providers
@@ -50,6 +46,7 @@ class _MyApp extends State<MyApp> {
   void initState() {
     routeconfig.configureRoutes(router);
     Application.router = router;
+    Application.appdb = DatabaseHelper().initDb();
     super.initState();
   }
 
