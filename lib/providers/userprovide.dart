@@ -5,17 +5,11 @@ import 'package:flutterproject/services/UserService.dart';
 import 'dart:convert';
 
 class UserProvide with ChangeNotifier {
-  Map _userinfo;
   Widget userdrawer;
   List<PopupMenuItem> useractions = [];
   List userlist = [];
   List userdrawerdata = [];
   UserModel userentity;
-  void SaveUserInfo(Map val) {
-    _userinfo = val;
-    userentity = UserModel.fromJson(val);
-    notifyListeners();
-  }
 
   Future UserList(FormData data) async {
     Response res = await UserService().list(data);

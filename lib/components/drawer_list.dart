@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterproject/providers/userprovide.dart';
+import 'package:flutterproject/route/application.dart';
 import 'package:provide/provide.dart';
 
 class Drawer_List extends StatefulWidget {
@@ -37,6 +38,10 @@ class _Drawer_ListState extends State<Drawer_List> {
                       leading: Icon(Icons.insert_drive_file),
                       title: Text(sublist[index]['title']),
                       trailing: Icon(Icons.keyboard_arrow_right),
+                      onTap: () {
+                        Application.router
+                            .navigateTo(context, sublist[index]['path']);
+                      },
                     );
                   },
                 ),

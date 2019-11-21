@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutterproject/components/drawer_header.dart';
 import 'package:flutterproject/components/drawer_list.dart';
+import 'package:flutterproject/providers/userprovide.dart';
+import 'package:provide/provide.dart';
 
 class DrawerIndex extends StatefulWidget {
   DrawerIndex({Key key}) : super(key: key);
@@ -10,6 +12,11 @@ class DrawerIndex extends StatefulWidget {
 }
 
 class _DrawerIndexState extends State<DrawerIndex> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(

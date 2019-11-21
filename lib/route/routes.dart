@@ -7,6 +7,7 @@ import 'package:flutterproject/pages/HomePage.dart';
 import 'package:flutterproject/pages/UserMgr/AddUser.dart';
 import 'package:flutterproject/pages/UserMgr/EditUser_Page.dart';
 import 'package:flutterproject/pages/UserMgr/UserDetail_Page.dart';
+import 'package:flutterproject/pages/UserPage.dart';
 import 'package:flutterproject/tools/fluro_convert_util.dart';
 
 class routeconfig {
@@ -19,6 +20,12 @@ class routeconfig {
         handlerFunc: (BuildContext context, Map<String, dynamic> params) {
       return HomePage();
     }));
+
+    router.define("/user/list", handler: Handler(
+        handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+      return UserPage();
+    }));
+
     router.define('/user/add', handler: Handler(
         handlerFunc: (BuildContext context, Map<String, List<String>> params) {
       return AddUser();

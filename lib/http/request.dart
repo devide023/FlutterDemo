@@ -16,7 +16,8 @@ class request {
   Dio get instance {
     _dio.interceptors
         .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
-      print('request======path:${options.path}==${options.queryParameters}');
+      print(
+          'request path:${options.path}->queryParameters:${options.queryParameters}->postparam:${options.data}');
       return options;
     }, onResponse: (Response response) async {
       return response;

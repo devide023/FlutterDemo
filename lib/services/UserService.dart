@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 import '../http/request.dart';
 import 'package:dio/dio.dart';
 import 'dart:async';

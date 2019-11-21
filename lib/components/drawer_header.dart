@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterproject/config/config.dart';
+import 'package:flutterproject/db/userdao.dart';
 import 'package:flutterproject/providers/userprovide.dart';
 import 'package:provide/provide.dart';
 
@@ -24,9 +25,29 @@ class _Drawer_Header_WidgetState extends State<Drawer_Header_Widget> {
                 image: DecorationImage(
                     image: AssetImage("lib/image/headbg.jpg"),
                     fit: BoxFit.fill)),
-            currentAccountPicture: CircleAvatar(
-              backgroundImage: NetworkImage(AppConfig.str_imgurl +
-                  (model.userentity.headimg ?? "default_head.jpg")),
+            currentAccountPicture: InkWell(
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(AppConfig.str_imgurl +
+                    (model.userentity.headimg ?? "default_head.jpg")),
+              ),
+              onTap: () async {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return SimpleDialog(
+                        title: Text("确定要退出吗?"),
+                        children: <Widget>[
+                          ListTile(
+                            leading: Icon(Icons.label_outline),
+                            title: Text("退出"),
+                            onTap: () async {
+                              Userdao.Logout(context);
+                            },
+                          )
+                        ],
+                      );
+                    });
+              },
             ),
           ),
         );

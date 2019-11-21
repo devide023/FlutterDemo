@@ -1,6 +1,22 @@
 import 'package:sqflite/sqflite.dart';
 
 class InitDataBase {
+  static CreateTable_LoginInfo_v1(Batch batch) {
+    batch.execute("drop table if exists sys_login_info");
+    String sql = '''
+    create table sys_login_info (
+      id integer primary key autoincrement,
+      userid integer,
+      usercode text,
+      username text,
+      userpwd text,
+      orgid integer,
+      depid integer
+    );
+    ''';
+    batch.execute(sql);
+  }
+
   static CreateTable_SysUser_v1(Batch batch) async {
     batch.execute("DROP TABLE IF EXISTS sys_user");
     String sql = '''

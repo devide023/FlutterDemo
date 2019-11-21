@@ -15,10 +15,17 @@ class ProductListPage extends StatefulWidget {
 class _productstate extends State<StatefulWidget>
     with AutomaticKeepAliveClientMixin {
   List navlist;
+  Future _getdatafuture;
+  @override
+  void initState() {
+    super.initState();
+    _getdatafuture = HomeService.Homedata();
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: HomeService.Homedata(),
+      future: _getdatafuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(

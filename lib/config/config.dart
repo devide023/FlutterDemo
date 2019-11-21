@@ -1,6 +1,7 @@
 class AppConfig {
   static String str_Appname = '黄金游轮';
   static String str_userlist = "用户列表";
+  static String str_home = "首页";
   static String str_my = "我的";
   static String str_productlist = "产品列表";
   static String str_baseurl = 'http://192.168.20.72:8000';

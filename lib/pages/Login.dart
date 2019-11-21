@@ -4,6 +4,7 @@ import 'package:flutterproject/pages/HomePage.dart';
 import 'package:flutterproject/providers/userprovide.dart';
 import 'package:flutterproject/public/NetLoadingDialog.dart';
 import 'package:flutterproject/services/UserService.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provide/provide.dart';
 import 'dart:convert';
 
@@ -30,33 +31,20 @@ class _Login extends State<Login> {
         var result = json.decode(res);
         if (result['user'] != null) {
           var provide = Provide.value<UserProvide>(context);
-          provide.SaveUserInfo(result['user']);
           provide.UserDrawerdata(result['user']['id']);
+          provide.GetUserEntity(result['user']['id']);
           Userdao.SaveUserInfo(result['user']);
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => HomePage()),
+              (route) => route == null);
+        } else {
+          Fluttertoast.showToast(
+              msg: result['msg'],
+              backgroundColor: Colors.deepOrange,
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.CENTER);
         }
-        showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text("提示"),
-                content: Text(result['msg']),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text("确定"),
-                    onPressed: () {
-                      if (result['user'] == null) {
-                        Navigator.of(context).pop();
-                      } else {
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(builder: (context) => HomePage()),
-                            (route) => route == null);
-                      }
-                    },
-                  )
-                ],
-              );
-            });
+        ;
       });
     } catch (e) {
       showDialog(

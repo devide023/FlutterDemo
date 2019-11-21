@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterproject/db/DatabaseHelper.dart';
-import 'package:flutterproject/db/localdb.dart';
+import 'package:flutterproject/db/Dbmanager.dart';
 import 'package:flutterproject/db/userdao.dart';
 import 'package:flutterproject/entitys/userentity.dart';
 import 'package:flutterproject/providers/userprovide.dart';
@@ -61,8 +61,10 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
         children: <Widget>[
           Center(
             child: FlatButton(
-              child: Text("sqflite test"),
-              onPressed: () {},
+              child: Text("logout"),
+              onPressed: () async {
+                Userdao.Logout(context);
+              },
             ),
           ),
           Center(
@@ -97,10 +99,11 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
             child: RaisedButton(
               onPressed: () async {
                 var db = await Application.appdb;
-                var des = await Dbmanager.sqlite_table_describe(db, "sqlite_master");
+                var des =
+                    await Dbmanager.sqlite_table_describe(db, "sqlite_master");
                 print("desc>>>>>>$des");
                 var list = await Dbmanager.sqlite_tabeles(db);
-                for(var item in list){
+                for (var item in list) {
                   print("item>>>>>>${item}");
                 }
               },

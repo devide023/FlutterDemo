@@ -19,9 +19,9 @@ class DatabaseHelper {
   Future<Database> initDb() async {
     final fileDirectory = await getApplicationDocumentsDirectory();
     final dbPath = join(fileDirectory.path, 'mydatabase.db');
-    print("dbpath========$dbPath");
+    print("数据库路径========$dbPath");
     var db = await openDatabase(dbPath,
-        version: 3,
+        version: 2,
         onCreate: _onCreate,
         onUpgrade: _onUpgrade,
         onDowngrade: onDatabaseDowngradeDelete);
@@ -31,6 +31,7 @@ class DatabaseHelper {
   void _onCreate(Database db, int newVersion) async {
     var batch = db.batch();
     print("===========创建数据库==============");
+    InitDataBase.CreateTable_LoginInfo_v1(batch);
     InitDataBase.CreateTable_SysUser_v1(batch);
     InitDataBase.CreateTable_SysRole_v1(batch);
     InitDataBase.CreateTable_SysMenu_v1(batch);
@@ -41,6 +42,7 @@ class DatabaseHelper {
   void _onUpgrade(Database db, int oldversion, int newsersion) async {
     print("===========迁移数据库,原版本:$oldversion,新版本:$newsersion==============");
     var batch = db.batch();
+    InitDataBase.CreateTable_LoginInfo_v1(batch);
     InitDataBase.CreateTable_SysUser_v1(batch);
     InitDataBase.CreateTable_SysRole_v1(batch);
     InitDataBase.CreateTable_SysMenu_v1(batch);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterproject/components/drawer_index.dart';
 import 'package:flutterproject/config/config.dart';
+import 'package:flutterproject/pages/IndexPage.dart';
 import 'package:flutterproject/providers/mainprovide.dart';
 import 'package:flutterproject/providers/myprovide.dart';
 import 'package:flutterproject/providers/userprovide.dart';
@@ -42,7 +43,7 @@ class _HomePage extends State<HomePage> with AutomaticKeepAliveClientMixin {
           drawer: DrawerIndex(),
           body: IndexedStack(
             index: vals.get<MyProvide>().index,
-            children: [UserPage(), ProductListPage(), MyPage()],
+            children: [IndexPage(), ProductListPage(), MyPage()],
           ),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: vals.get<MyProvide>().index,
@@ -52,8 +53,8 @@ class _HomePage extends State<HomePage> with AutomaticKeepAliveClientMixin {
             type: BottomNavigationBarType.fixed,
             items: [
               BottomNavigationBarItem(
-                icon: Icon(Icons.list),
-                title: Text(AppConfig.str_userlist),
+                icon: Icon(Icons.home),
+                title: Text(AppConfig.str_home),
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.category),
