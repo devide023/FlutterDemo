@@ -45,9 +45,9 @@ class routeconfig {
     router.define('user/detail', handler: Handler(
         handlerFunc: (BuildContext context, Map<String, List<String>> params) {
       var userinfo = params['userinfo']?.first;
-      print("get userinfo json-------$userinfo");
-      var userentity =
-          UserModel.fromJson(FluroConvertUtils.string2map(userinfo));
+      var d = FluroConvertUtils.string2map(userinfo);
+      print("receive json=====$d");
+      var userentity = UserModel.fromJson(d);
       return UserDetail_Page(
         userinfo: userentity,
       );

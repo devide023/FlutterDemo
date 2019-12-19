@@ -136,8 +136,6 @@ class _listitem extends State<listitem> {
                                           var newpwd = ctr_setpwd.text;
                                           var res = await UserService().setpwd(
                                               widget.userobj.id, newpwd);
-                                          print(
-                                              "userid:${widget.userobj.id},userpwd:$newpwd");
                                           var result =
                                               jsonDecode(res.toString());
                                           BotToast.showText(

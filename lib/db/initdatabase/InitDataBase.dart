@@ -31,7 +31,7 @@ class InitDataBase {
             tel TEXT,
             phone TEXT,
             address TEXT,
-            birthdate NUMERIC,
+            birthday NUMERIC,
             sex INTEGER,
             addtime NUMERIC
             );

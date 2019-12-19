@@ -18,6 +18,7 @@ class UserProvide with ChangeNotifier {
 
   void UserDrawerdata(int userid) {
     UserService().drawer(userid).then((res) {
+      print('userdata-------${res.toString()}');
       if (res.toString().isNotEmpty) {
         var result = json.decode(res.toString());
         userdrawerdata = result;

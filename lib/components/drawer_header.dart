@@ -18,8 +18,8 @@ class _Drawer_Header_WidgetState extends State<Drawer_Header_Widget> {
       builder: (context, child, model) {
         return SliverToBoxAdapter(
           child: UserAccountsDrawerHeader(
-            accountName: Text(model.userentity.username),
-            accountEmail: Text(model.userentity.usercode),
+            accountName: Text(model.userentity.username ?? ""),
+            accountEmail: Text(model.userentity.usercode ?? ""),
             onDetailsPressed: () {},
             decoration: BoxDecoration(
                 image: DecorationImage(

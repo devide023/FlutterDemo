@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutterproject/entitys/userentity.dart';
@@ -13,7 +12,6 @@ import 'package:sqflite/sqflite.dart';
 class Userdao {
   static Future<int> SaveUserInfo(Map<String, dynamic> user) async {
     var db = await Application.appdb;
-    print("====sys_user===${user}");
     await db.transaction((trx) async {
       trx.rawDelete("delete from sys_login_info ");
       var result = await trx.rawInsert('''insert into sys_login_info(
@@ -27,8 +25,8 @@ class Userdao {
         user['usercode'],
         user['username'] ?? '',
         user['oldpwd'] ?? '',
-        user['orgid'] ?? 0,
-        user['depid'] ?? 0
+        user['company_id'] ?? 0,
+        user['department_id'] ?? 0
       ]);
       return result;
     });
@@ -39,7 +37,6 @@ class Userdao {
     var list =
         await db.rawQuery("select * from sys_user order by id asc limit 1");
     var temp = list.first;
-    print("local userinfo====$temp");
     return Map<String, dynamic>.from({
       "id": temp["userid"],
       "status": temp["status"],
@@ -50,7 +47,7 @@ class Userdao {
       "phone": temp["phone"],
       "sex": temp["sex"],
       "address": temp["address"],
-      "birthdate": temp["birthdate"],
+      "birthday": temp["birthday"],
       "headimg": temp["headimg"],
     });
   }
@@ -75,7 +72,6 @@ class Userdao {
       var userpwd = userentity['userpwd'];
       var loginres = await UserService().login(usercode, userpwd);
       var loginresult = jsonDecode(loginres.toString());
-      print("loginresult>>>>$loginresult");
       if (loginresult['code'] == 1) {
         var userprovide = Provide.value<UserProvide>(context);
         userprovide.UserDrawerdata(userid);

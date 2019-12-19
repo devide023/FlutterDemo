@@ -11,6 +11,7 @@ class request {
     sendTimeout: 1000 * 60,
     receiveTimeout: 5000 * 60,
     contentType: Headers.formUrlEncodedContentType,
+    responseType: ResponseType.plain,
   ));
 
   Dio get instance {

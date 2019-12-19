@@ -7,11 +7,14 @@ import 'package:flutterproject/services/UserService.dart';
 import 'package:flutterproject/tools/fluro_convert_util.dart';
 
 class SearchBarDelegate extends SearchDelegate {
-  List<UserModel> users;
+  List<UserModel> users = [];
   Future GetData(String keyword) async {
     var res = await UserService().Search(keyword);
     var userjson = jsonDecode(res.toString());
-    users = userentity.fromJson(userjson).userlist;
+    users.clear();
+    (userjson['userlist'] as List).cast().forEach((item) {
+      users.add(UserModel.fromJson(item));
+    });
     return users;
   }
 
@@ -53,9 +56,7 @@ class SearchBarDelegate extends SearchDelegate {
             ),
           ),
           onTap: () {
-            print(users[index].id);
             var json = FluroConvertUtils.object2string(users[index]);
-            print("json----$json");
             Application.router
                 .navigateTo(context, '/user/detail?userinfo=$json');
           },

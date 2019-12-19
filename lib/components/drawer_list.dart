@@ -39,8 +39,8 @@ class _Drawer_ListState extends State<Drawer_List> {
                       title: Text(sublist[index]['title']),
                       trailing: Icon(Icons.keyboard_arrow_right),
                       onTap: () {
-                        Application.router
-                            .navigateTo(context, sublist[index]['path']);
+                        Application.router.navigateTo(
+                            context, sublist[index]['flutter_router']);
                       },
                     );
                   },

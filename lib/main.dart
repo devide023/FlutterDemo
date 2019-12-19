@@ -7,6 +7,7 @@ import 'package:flutterproject/pages/HomePage.dart';
 import 'package:flutterproject/pages/Login.dart';
 import 'package:flutterproject/providers/mainprovide.dart';
 import 'package:flutterproject/providers/myprovide.dart';
+import 'package:flutterproject/providers/searchprovide.dart';
 import 'package:flutterproject/providers/userprovide.dart';
 import 'package:flutterproject/route/application.dart';
 import 'package:flutterproject/route/routes.dart';
@@ -21,17 +22,18 @@ void main() {
   providers
     ..provide(Provider.value(MainProvide()))
     ..provide(Provider.value(MyProvide()))
+    ..provide(Provider.value(SearchProvide()))
     ..provide(Provider.value(UserProvide()));
   runApp(ProviderNode(
     providers: providers,
     child: MyApp(),
   ));
-  if (Platform.isAndroid) {
-    // 以下两行 设置android状态栏为透明的沉浸。写在组件渲染之后，是为了在渲染后进行set赋值，覆盖状态栏，写在渲染之前MaterialApp组件会覆盖掉这个值。
-    SystemUiOverlayStyle systemUiOverlayStyle =
-        SystemUiOverlayStyle(statusBarColor: Colors.transparent);
-    SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
-  }
+  // if (Platform.isAndroid) {
+  //   // 以下两行 设置android状态栏为透明的沉浸。写在组件渲染之后，是为了在渲染后进行set赋值，覆盖状态栏，写在渲染之前MaterialApp组件会覆盖掉这个值。
+  //   SystemUiOverlayStyle systemUiOverlayStyle =
+  //       SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+  //   SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+  // }
 }
 
 class MyApp extends StatefulWidget {

@@ -160,7 +160,7 @@ class _UserDetail extends State<UserDetail_Page> {
                 padding: EdgeInsets.symmetric(horizontal: 3.0),
                 child: ListTile(
                   leading: Icon(Icons.calendar_today),
-                  title: Text(widget.userinfo.birthdate ?? ""),
+                  title: Text(widget.userinfo.birthday ?? ""),
                   trailing: Icon(Icons.keyboard_arrow_right),
                 ),
               ),

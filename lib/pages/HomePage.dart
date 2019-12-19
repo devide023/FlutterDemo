@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterproject/components/drawer_index.dart';
 import 'package:flutterproject/config/config.dart';
 import 'package:flutterproject/pages/IndexPage.dart';
+import 'package:flutterproject/pages/TestPage.dart';
 import 'package:flutterproject/providers/mainprovide.dart';
 import 'package:flutterproject/providers/myprovide.dart';
 import 'package:flutterproject/providers/userprovide.dart';
@@ -33,9 +34,9 @@ class _HomePage extends State<HomePage> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.instance =
-        ScreenUtil(width: 750, height: 1334, allowFontScaling: true)
-          ..init(context);
+    ScreenUtil.instance = ScreenUtil(width: 750, height: 1334)
+      ..init(context)
+      ..setSp(12.0);
     return ProvideMulti(
       requestedValues: [MyProvide, MainProvide, UserProvide],
       builder: (context, child, vals) {
@@ -43,7 +44,11 @@ class _HomePage extends State<HomePage> with AutomaticKeepAliveClientMixin {
           drawer: DrawerIndex(),
           body: IndexedStack(
             index: vals.get<MyProvide>().index,
-            children: [IndexPage(), ProductListPage(), MyPage()],
+            children: [
+              IndexPage(),
+              ProductListPage(),
+              GZXDropDownMenuTestPage()
+            ],
           ),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: vals.get<MyProvide>().index,

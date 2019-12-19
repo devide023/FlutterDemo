@@ -3,21 +3,22 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterproject/config/config.dart';
 import 'package:flutterproject/entitys/userentity.dart';
-import 'package:flutterproject/providers/mainprovide.dart';
 import 'package:flutterproject/public/NetLoadingDialog.dart';
-import 'package:flutterproject/route/application.dart';
 import 'package:flutterproject/services/UploadService.dart';
 import 'package:flutterproject/services/UserService.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 
 class userform extends StatefulWidget {
   UserModel userentity;
   bool showpasswordfiled;
   bool editusercode;
+  bool isadd = true;
   userform(
       {Key key,
       this.userentity,
       this.showpasswordfiled = false,
+      this.isadd = true,
       this.editusercode = false})
       : super(key: key);
 
@@ -41,22 +42,23 @@ class _userform extends State<userform> {
   int choosesex = 1;
   @override
   void initState() {
-    ctr_usercode.text = widget.userentity.usercode;
-    ctr_username.text = widget.userentity.username;
-    ctr_usertel.text = widget.userentity.tel;
-    ctr_userphone.text = widget.userentity.phone;
-    ctr_birthdate.text = widget.userentity.birthdate;
-    ctr_address.text = widget.userentity.address;
-    ctr_birthdate.text = widget.userentity.birthdate;
-    var sex = widget.userentity.sex;
-    if (sex == 1) {
-      ctr_sex.text = "男";
+    if (!widget.isadd) {
+      ctr_usercode.text = widget.userentity.usercode;
+      ctr_username.text = widget.userentity.username;
+      ctr_usertel.text = widget.userentity.tel;
+      ctr_userphone.text = widget.userentity.phone;
+      ctr_birthdate.text = widget.userentity.birthday;
+      ctr_address.text = widget.userentity.address;
+      var sex = widget.userentity.sex;
+      if (sex == 1) {
+        ctr_sex.text = "男";
+      }
+      if (sex == 2) {
+        ctr_sex.text = "女";
+      }
+      temp = widget.userentity.headimg ?? AppConfig.str_default_image;
+      ctr_head.text = temp;
     }
-    if (sex == 2) {
-      ctr_sex.text = "女";
-    }
-    temp = widget.userentity.headimg ?? AppConfig.str_default_image;
-    ctr_head.text = temp;
     super.initState();
   }
 
@@ -78,11 +80,12 @@ class _userform extends State<userform> {
     }
   }
 
-  Future SubmitData(FormData formdata) {
-    if (widget.userentity.id > 0) {
+  Future SubmitData(FormData formdata) async {
+    if (!widget.isadd) {
       return UserService().modify(formdata);
     } else {
-      return UserService().add(formdata);
+      var res = await UserService().add(formdata);
+      return res;
     }
   }
 
@@ -241,17 +244,43 @@ class _userform extends State<userform> {
                 color: Theme.of(context).primaryColor,
                 child: Text("确定"),
                 onPressed: () async {
-                  widget.userentity.sex = choosesex;
-                  widget.userentity.usercode = ctr_usercode.text;
-                  widget.userentity.username = ctr_username.text;
-                  widget.userentity.tel = ctr_usertel.text;
-                  widget.userentity.phone = ctr_userphone.text;
-                  widget.userentity.birthdate = ctr_birthdate.text;
-                  widget.userentity.address = ctr_address.text;
-                  widget.userentity.birthdate = ctr_birthdate.text;
-                  widget.userentity.headimg = ctr_head.text;
-                  widget.userentity.userpwd = ctr_userpwd.text;
-                  var formdata = FormData.fromMap(widget.userentity.toJson());
+                  FormData formdata;
+                  if (widget.isadd) {
+                    var j = {
+                      'id': 0,
+                      'sex': choosesex.toString(),
+                      'usercode': ctr_usercode.text,
+                      'username': ctr_username.text,
+                      'tel': ctr_usertel.text,
+                      'phone': ctr_userphone.text,
+                      'birthday': ctr_birthdate.text,
+                      'address': ctr_address.text,
+                      'headimg': ctr_head.text,
+                      'laravelpwd': ctr_userpwd.text,
+                      'status': '1',
+                      'company_id': '0',
+                      'department_id': '0',
+                      'position': '',
+                    };
+                    formdata = FormData.fromMap(j);
+                  } else {
+                    widget.userentity.sex = choosesex;
+                    widget.userentity.usercode = ctr_usercode.text;
+                    widget.userentity.username = ctr_username.text;
+                    widget.userentity.tel = ctr_usertel.text;
+                    widget.userentity.phone = ctr_userphone.text;
+                    widget.userentity.birthday = ctr_birthdate.text;
+                    widget.userentity.address = ctr_address.text;
+                    widget.userentity.headimg = ctr_head.text;
+                    widget.userentity.laravelpwd = ctr_userpwd.text;
+                    widget.userentity.id = 0;
+                    widget.userentity.status = 1;
+                    widget.userentity.companyId = 0;
+                    widget.userentity.departmentId = 0;
+                    widget.userentity.position = '';
+                    widget.userentity.userpwd = '';
+                    formdata = FormData.fromMap(widget.userentity.toJson());
+                  }
                   var result = await showDialog(
                     context: context,
                     builder: (context) {
@@ -261,22 +290,10 @@ class _userform extends State<userform> {
                     },
                   );
                   var resjson = json.decode(result.toString());
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Text("提示"),
-                          content: Text(resjson['msg'].toString()),
-                          actions: <Widget>[
-                            FlatButton(
-                              child: Text("确定"),
-                              onPressed: () {
-                                Application.router.navigateTo(context, '/home');
-                              },
-                            )
-                          ],
-                        );
-                      });
+                  Fluttertoast.showToast(
+                      msg: resjson['msg'],
+                      toastLength: Toast.LENGTH_LONG,
+                      gravity: ToastGravity.CENTER);
                 },
               ),
             )

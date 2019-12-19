@@ -19,11 +19,7 @@ class _AddUser extends State<AddUser> {
         title: Text("添加用户信息"),
       ),
       body: userform(
-        userentity: UserModel(
-          headimg: AppConfig.str_default_image,
-          id: 0,
-          sex: 1,
-        ),
+        isadd: true,
         editusercode: true,
         showpasswordfiled: true,
       ),
