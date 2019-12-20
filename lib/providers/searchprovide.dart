@@ -9,6 +9,13 @@ class SearchProvide with ChangeNotifier {
   List xmtype = [];
   List shipclass = [];
   List menucodelist = [];
+  List saledata_rcno=[];
+  void GetSaleDataByRcno(String rcno,{String placeno,String typeno}){
+    BaseInfoServices.shipsaledata({"rcno":rcno,"placeno":placeno,"typeno":typeno}).then((res){
+      this.saledata_rcno =  jsonDecode(res.toString());
+      notifyListeners();
+    });
+  }
   void GetPlaceNo() {
     BaseInfoServices.placeno_gold5().then((res) {
       this.placeno = jsonDecode(res.toString());

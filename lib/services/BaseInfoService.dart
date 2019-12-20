@@ -32,4 +32,10 @@ class BaseInfoServices {
         .instance
         .get('/gold05/menucode', queryParameters: data);
   }
+
+  static Future shipsaledata(Map<String, dynamic> data) async {
+    return await request()
+        .instance
+        .get('/gold05/saledata', queryParameters: data);
+  }
 }

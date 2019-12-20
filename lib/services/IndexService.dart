@@ -10,7 +10,8 @@ class IndexService {
     //var v1 = await BaseInfoServices.index_gold5();
     var v1=await BaseInfoServices.placeno_gold5();
     var v2=await BaseInfoServices.menutyp_gold5();
-    var v3='{"placenolist":${v1},"menutypelist":${v2}}';
+    var saledata = await BaseInfoServices.shipsaledata({"rcno":""});
+    var v3='{"placenolist":${v1},"menutypelist":${v2},"saledata":${saledata}}';
     return v3;
   }
 }

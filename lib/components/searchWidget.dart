@@ -7,7 +7,8 @@ import 'package:flutterproject/providers/searchprovide.dart';
 import 'package:provide/provide.dart';
 
 class searchWidget extends StatefulWidget {
-  searchWidget({Key key}) : super(key: key);
+  Function onSearch;
+  searchWidget({Key key,this.onSearch,}) : super(key: key);
 
   @override
   _searchWidgetState createState() => _searchWidgetState();
@@ -19,6 +20,7 @@ class _searchWidgetState extends State<searchWidget> {
   @override
   Widget build(BuildContext context) {
     var provide = Provide.value<SearchProvide>(context);
+    provide.GetPlaceNo();
     var placenolist = provide.placeno;
     print("placenolist======$placenolist");
     return Provide<SearchProvide>(
@@ -75,8 +77,8 @@ class _searchWidgetState extends State<searchWidget> {
                         datavalue: "menuname",
                         clickCallback: (v) {
                           print("select value $v");
-                          postdata.remove("menuno");
-                          postdata.addAll({"menuno": v["menuno"]});
+                          postdata.remove("typeno");
+                          postdata.addAll({"typeno": v["typeno"]});
                         },
                       ),
                     ],
@@ -133,6 +135,7 @@ class _searchWidgetState extends State<searchWidget> {
             color: Colors.red,
             onPressed: () {
               print("postdata====$postdata");
+              widget.onSearch(postdata);
             },
           )
         ],
