@@ -4,7 +4,6 @@ import 'package:flutterproject/pages/HomePage.dart';
 import 'package:flutterproject/providers/userprovide.dart';
 import 'package:flutterproject/public/NetLoadingDialog.dart';
 import 'package:flutterproject/services/UserService.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provide/provide.dart';
 import 'dart:convert';
 
@@ -38,11 +37,11 @@ class _Login extends State<Login> {
               MaterialPageRoute(builder: (context) => HomePage()),
               (route) => route == null);
         } else {
-          Fluttertoast.showToast(
-              msg: result['msg'],
-              backgroundColor: Colors.deepOrange,
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.CENTER);
+//          Fluttertoast.showToast(
+//              msg: result['msg'],
+//              backgroundColor: Colors.deepOrange,
+//              toastLength: Toast.LENGTH_LONG,
+//              gravity: ToastGravity.CENTER);
         }
         ;
       });

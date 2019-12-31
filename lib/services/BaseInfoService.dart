@@ -13,6 +13,12 @@ class BaseInfoServices {
         .get('/gold05/xmtype', queryParameters: data);
   }
 
+  static Future xmtypes_gold5(FormData data) async {
+    return await request()
+        .instance
+        .post('/gold05/xmtypes', data: data);
+  }
+
   static Future index_gold5() async {
     return await request().instance.get('/gold05/index');
   }

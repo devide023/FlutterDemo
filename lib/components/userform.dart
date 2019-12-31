@@ -6,7 +6,6 @@ import 'package:flutterproject/entitys/userentity.dart';
 import 'package:flutterproject/public/NetLoadingDialog.dart';
 import 'package:flutterproject/services/UploadService.dart';
 import 'package:flutterproject/services/UserService.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 
 class userform extends StatefulWidget {
@@ -290,10 +289,10 @@ class _userform extends State<userform> {
                     },
                   );
                   var resjson = json.decode(result.toString());
-                  Fluttertoast.showToast(
-                      msg: resjson['msg'],
-                      toastLength: Toast.LENGTH_LONG,
-                      gravity: ToastGravity.CENTER);
+//                  Fluttertoast.showToast(
+//                      msg: resjson['msg'],
+//                      toastLength: Toast.LENGTH_LONG,
+//                      gravity: ToastGravity.CENTER);
                 },
               ),
             )

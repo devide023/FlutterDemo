@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutterproject/entitys/userentity.dart';
+
 import '../http/request.dart';
 import 'package:dio/dio.dart';
 import 'dart:async';
@@ -20,6 +22,19 @@ class UserService {
     } catch (e) {
       throw e;
     }
+  }
+
+  Future<List<UserModel>> allusers() async{
+    List<UserModel> list = [];
+    Response res = await request().instance.post('/user/list');
+    var userlist = jsonDecode(res.toString());
+    print("all userlist=========$userlist");
+    userlist['list']['data'].forEach((item){
+      print("itme#########$item");
+      list.add(UserModel.fromJson(item));
+    });
+    print("list========$list");
+    return list;
   }
 
   Future list(FormData data) async {

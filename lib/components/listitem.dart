@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterproject/config/config.dart';
 import 'package:flutterproject/entitys/userentity.dart';
@@ -88,8 +87,7 @@ class _listitem extends State<listitem> {
                                 onPressed: () async {
                                   var res = await UserService()
                                       .remove(widget.userobj.id);
-                                  BotToast.showText(
-                                      text: jsonDecode(res.toString())['msg']);
+
                                   Navigator.of(context).pop();
                                 },
                               ),
@@ -127,36 +125,7 @@ class _listitem extends State<listitem> {
                                     obscureText: true,
                                   ),
                                 ),
-                                ButtonTheme.bar(
-                                  child: ButtonBar(
-                                    children: <Widget>[
-                                      FlatButton(
-                                        child: Text("确定"),
-                                        onPressed: () async {
-                                          var newpwd = ctr_setpwd.text;
-                                          var res = await UserService().setpwd(
-                                              widget.userobj.id, newpwd);
-                                          var result =
-                                              jsonDecode(res.toString());
-                                          BotToast.showText(
-                                            text: result['msg'],
-                                          );
-                                          if (result['code'] == 1) {
-                                            Navigator.of(context).pop();
-                                          }
-                                        },
-                                      ),
-                                      FlatButton(
-                                        textColor:
-                                            Theme.of(context).primaryColor,
-                                        child: Text("取消"),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      )
-                                    ],
-                                  ),
-                                )
+
                               ],
                             ),
                           ));

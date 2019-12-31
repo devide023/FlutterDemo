@@ -1,12 +1,15 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutterproject/entitys/userentity.dart';
+import 'package:flutterproject/model/LoginResultModel.dart';
+import 'package:flutterproject/model/ResponseModel.dart';
 import 'package:flutterproject/pages/Login.dart';
 import 'package:flutterproject/providers/userprovide.dart';
 import 'package:flutterproject/route/application.dart';
 import 'package:flutterproject/services/UserService.dart';
-import 'package:provide/provide.dart';
+import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 class Userdao {
@@ -59,30 +62,21 @@ class Userdao {
     return list.length > 0 ? UserModel.fromJson(list.first) : UserModel();
   }
 
-  static Future<bool> islogined(BuildContext context) async {
+  static Future<LoginResultModel> islogined() async {
     var db = await Application.appdb;
     int count = Sqflite.firstIntValue(
         await db.rawQuery('SELECT COUNT(*) FROM sys_login_info'));
-    if (count > 0) {
-      var list = await db.rawQuery(
-          "select userid,usercode,userpwd from sys_login_info order by id asc limit 1");
-      var userentity = list.first;
-      var userid = userentity['userid'];
-      var usercode = userentity['usercode'];
-      var userpwd = userentity['userpwd'];
-      var loginres = await UserService().login(usercode, userpwd);
-      var loginresult = jsonDecode(loginres.toString());
-      if (loginresult['code'] == 1) {
-        var userprovide = Provide.value<UserProvide>(context);
-        userprovide.UserDrawerdata(userid);
-        userprovide.GetUserEntity(userid);
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
+    var list = await db.rawQuery(
+        "select userid,usercode,userpwd from sys_login_info order by id asc limit 1");
+    var userentity = list.first;
+    var usercode = userentity['usercode'];
+    var userpwd = userentity['userpwd'];
+    var loginres = await UserService().login(usercode, userpwd);
+    var loginresult = jsonDecode(loginres.toString());
+    print("logininfo=========$loginresult");
+    var r =  LoginResultModel.fromJson(loginresult);
+    Application.userid=r.user.id;
+    return r;
   }
 
   static Logout(BuildContext context) async {
