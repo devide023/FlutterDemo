@@ -44,4 +44,9 @@ class BaseInfoServices {
         .instance
         .get('/gold05/saledata', queryParameters: data);
   }
+  static Future shipsaledatas(Map<String, dynamic> data) async {
+    return await request()
+        .instance
+        .post('/gold05/saledatas', queryParameters: data);
+  }
 }

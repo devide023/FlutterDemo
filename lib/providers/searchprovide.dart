@@ -20,6 +20,12 @@ class SearchProvide with ChangeNotifier {
   bool _showplaceno =false;
   bool _showxmtyp = false;
 
+  void xmtypeclean(){
+    this._xmtype_items.clear();
+    this.xmtype.clear();
+    notifyListeners();
+  }
+
   set xmtypeItems(List<String> items){
     this._xmtype_items = items;
     notifyListeners();
@@ -66,6 +72,12 @@ class SearchProvide with ChangeNotifier {
   void GetSaleDataByRcno(String rcno,{String placeno,String typeno}){
     current_rcno = rcno;
     BaseInfoServices.shipsaledata({"rcno":rcno,"placeno":placeno,"typeno":typeno}).then((res){
+      this.saledata_rcno =  jsonDecode(res.toString());
+      notifyListeners();
+    });
+  }
+  void GetSaleDataByRcnos({List<String> rcnos,List<String> placenos,List<String> typenos}){
+    BaseInfoServices.shipsaledatas({"rcnos":rcnos,"placenos":placenos,"typenos":typenos}).then((res){
       this.saledata_rcno =  jsonDecode(res.toString());
       notifyListeners();
     });

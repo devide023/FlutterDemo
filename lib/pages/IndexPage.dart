@@ -25,6 +25,7 @@ class _IndexPageState extends State<IndexPage> {
   String placeno = '';
   String typeno = '';
   SearchProvide searchProvide = SearchProvide();
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -109,7 +110,7 @@ class _IndexPageState extends State<IndexPage> {
   @override
   Widget build(BuildContext context) {
     searchProvide.GetShipClass();
-    searchProvide.GetSaleDataByRcno("");
+    searchProvide.GetSaleDataByRcnos();
     searchProvide.GetPlaceNo();
     List dzxl = [];
     return Scaffold(
@@ -120,33 +121,49 @@ class _IndexPageState extends State<IndexPage> {
             return SearchDrawerhWidget(
               shipclasslist: m.shipclass,
               selected_rcno_items: m.rcnoItems,
-              onselectedItems: (items){
-                m.rcnoItems=items;
+              onselectedItems: (items) {
+                m.rcnoItems = items;
               },
               isShow: m.showRcnoItems,
-              onshow: (v){
-                m.showRcnoItems=v;
+              onshow: (v) {
+                m.showRcnoItems = v;
               },
-
               placenolist: m.placeno,
               selectplacenoItems: m.placenoItems,
-              onPlacenoSelected: (items){
+              onPlacenoSelected: (items) {
                 m.placenoItems = items;
-                m.GetXMTypeList(items);
+                if (items.length != 0) {
+                  m.xmtype.clear();
+                  m.xmtypeItems = [];
+                  m.GetXMTypeList(items);
+                } else {
+                  m.xmtypeclean();
+                }
               },
               showplaceno: m.showplaceno,
-              onPlacenoShow: (v){
-                m.showPlaceno=v;
+              onPlacenoShow: (v) {
+                m.showPlaceno = v;
               },
-
               xmtypelist: m.xmtype,
               selectedtypeItems: m.xmtypeItems,
               showXmtype: m.showxmtyp,
-              onXmtypeSelected: (items){
+              onXmtypeSelected: (items) {
                 m.xmtypeItems = items;
               },
-              onXmtypeShow: (v){
-                m.showxmtyp=v;
+              onXmtypeShow: (v) {
+                m.showxmtyp = v;
+              },
+              onCancel: () {
+                Navigator.of(context).pop();
+              },
+              onQuery: () {
+                print(m.rcnoItems);
+                print(m.placenoItems);
+                print(m.xmtypeItems);
+                m.GetSaleDataByRcnos(
+                    rcnos: m.rcnoItems,
+                    placenos: m.placenoItems,
+                    typenos: m.xmtypeItems);
               },
             );
           },
